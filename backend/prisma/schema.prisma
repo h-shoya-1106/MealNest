@@ -6,10 +6,104 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  // output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id         Int     @id @default(autoincrement())
+  name       String
+  email      String  @unique
+  password   String // ハッシュ化されたパスワード
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt      @map("updated_at")
+
+  menus      Menu[]
+}
+
+model Menu {
+  id          Int        @id @default(autoincrement())
+  user        User       @relation(fields: [userId], references: [id])
+  userId      Int        @map("user_id")
+  name        String   
+  date        DateTime
+  timeZone    MstTimeZone @relation(fields: [timeZoneId], references: [id])
+  timeZoneId  Int        @map("time_zone_id")
+  calorie     Int?
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt      @map("updated_at")
+  deletedAt   DateTime?  @map("deleted_at")
+
+  menuDishes  MenuDish[]
+}
+
+model Dish {
+  id             Int            @id @default(autoincrement())
+  name           String       
+  dishStatus     MstDishStatus? @relation(fields: [dishStatusId], references: [id])
+  dishStatusId   Int?           @map("dish_status_id")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt      @map("updated_at")
+  deletedAt      DateTime?      @map("deleted_at")
+
+  menuDishes     MenuDish[]
+}
+
+model MstMaterial {
+  id          Int     @id @default(autoincrement())
+  displayName String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+}
+
+model MstQuantity {
+  id          Int     @id @default(autoincrement())
+  displayName String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  menuDishes  MenuDish[]
+}
+
+model MstDishStatus {
+  id          Int     @id @default(autoincrement())
+  displayName String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  dishes      Dish[]
+}
+
+model MstTimeZone {
+  id          Int     @id @default(autoincrement())
+  displayName String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  menus       Menu[]
+}
+
+model MstNutrient {
+  id          Int     @id @default(autoincrement())
+  displayName String
+  unit        String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+}
+
+model MenuDish {
+  id          Int         @id @default(autoincrement())
+  menu        Menu        @relation(fields: [menuId], references: [id])
+  menuId      Int         @map("menu_id")
+  dish        Dish        @relation(fields: [dishId], references: [id])
+  dishId      Int         @map("dish_id")
+  quantity    MstQuantity @relation(fields: [quantityId], references: [id])
+  quantityId  Int         @map("quantity_id")
+  amount      Int?  // "適量"はnullで対応
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt      @map("updated_at")
 }
