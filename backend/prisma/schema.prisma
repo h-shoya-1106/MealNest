@@ -107,3 +107,10 @@ model MenuDish {
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt      @map("updated_at")
 }
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  date      String
+  content   String
+  createdAt DateTime @default(now())
+}
