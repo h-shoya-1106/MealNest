@@ -1,15 +1,13 @@
 import { eachDayOfInterval, endOfMonth, getDay, startOfMonth } from "date-fns";
 import { DayCell } from "../Day/DayCell";
-import { format } from "date-fns";
-import { Meal } from '../../types/index';
 
 
 type Props = {
   currentMonth: Date;
-  data: Record<string, Meal>;
+  mstTimeZone: { id: number, displayName: string }[];
 };
 
-export const MonthView = ({ currentMonth, data }: Props) => {
+export const MonthView = ({ currentMonth, mstTimeZone }: Props) => {
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth),
@@ -26,7 +24,7 @@ export const MonthView = ({ currentMonth, data }: Props) => {
       <div className="grid grid-cols-7 gap-x-2 gap-y-6 text-center text-sm">
         {prefixBlanks.map((_, i) => <div key={`blank-${i}`} />)}
         {days.map((day) => (
-          <DayCell key={day.toISOString()} day={day} meal={data[format(day, "yyyy-MM-dd")]} />
+          <DayCell key={day.toDateString()} day={day} mstTimeZone={mstTimeZone} />
         ))}
       </div>
     </>

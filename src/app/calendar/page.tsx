@@ -6,11 +6,12 @@ import { CalendarHeader } from "../../../features/calendar/components/Header/Cal
 import { MonthView } from "../../../features/calendar/components/Month/MonthView";
 import { WeekView } from "../../../features/calendar/components/Week/WeekView";
 import { Meal } from '../../../features/calendar/types/index';
-import { Menu } from "@prisma/client";
+import { Menu, MstTimeZone } from "@prisma/client";
 
 
 export default function CalendarPage() {
   const [menu, setMenu] = useState<Menu[]>([]);
+  const [mstTimeZone, setMstTimeZone] = useState<MstTimeZone[]>([])
   const [viewMode, setViewMode] = useState<"month" | "week">("month");
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -29,22 +30,20 @@ export default function CalendarPage() {
     fetchMenu();
   }, [currentMonth]);
 
-  // console.log(menu);
-  menu.forEach(menu => {
-  console.log(menu);
-});
+  useEffect(() => {
+    const fetchMstTimeZone = async () => {
+      const res = await fetch('/api/mstData/mstTimeZone');
+      const data = await res.json();
+      setMstTimeZone(data);
+    };
+    fetchMstTimeZone();
+  }, []);
 
   // 仮データ
   const sampleWeeklyMenus: Record<string, Meal> = {
     // Sunday: { morning: "Natto rice", lunch: "Curry", dinner: "Hot pot" },
     // Monday: { morning: "Toast", lunch: "Ramen" },
     // Tuesday: {},
-  };
-
-  const sampleMonthlyData: Record<string, Meal> = {
-    // "2025-07-04": { morning: "Natto", lunch: "Curry", dinner: "Sushi" },
-    // "2025-07-07": { lunch: "Ramen" },
-    // "2025-07-12": { morning: "Toast", dinner: "Tempura" },
   };
 
   const handleDelete = (day: string) => {
@@ -62,7 +61,7 @@ export default function CalendarPage() {
       />
 
       {viewMode === "month" ? (
-        <MonthView currentMonth={currentMonth} menu={menu} />
+        <MonthView currentMonth={currentMonth} mstTimeZone={mstTimeZone} />
       ) : (
         <WeekView data={sampleWeeklyMenus} onDelete={handleDelete} />
       )}
