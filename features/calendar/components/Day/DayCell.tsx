@@ -1,12 +1,13 @@
 import { isToday } from "date-fns";
 import { format } from "date-fns";
+import { Menu } from "../../types";
 
 type Props = {
   day: Date;
-  mstTimeZone: { id: number, displayName: string }[];
+  menuList: Menu[];
 };
 
-export const DayCell = ({ day, mstTimeZone }: Props) => {
+export const DayCell = ({ day, menuList }: Props) => {
   return (
     <div className="flex flex-col items-center space-y-1">
       <button
@@ -16,11 +17,13 @@ export const DayCell = ({ day, mstTimeZone }: Props) => {
       >
         {format(day, "d")}
       </button>
-      <div className="flex gap-[2px] text-xs text-gray-600 h-[6px]">
-        {mstTimeZone.map((tz) => (
-          <span key={tz.id}>{tz.displayName}</span>
-        ))}
-      </div>
+      {menuList.length > 0 && (
+        <div className="flex gap-[2px] text-xs text-gray-600 h-[6px]">
+          {menuList.map((menu) => (
+            <span key={menu.id}>{menu.timeZone.displayName}</span>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

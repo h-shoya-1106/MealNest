@@ -1,13 +1,15 @@
-import { eachDayOfInterval, endOfMonth, getDay, startOfMonth } from "date-fns";
+import { eachDayOfInterval, endOfMonth, getDay, isSameDay, startOfMonth } from "date-fns";
 import { DayCell } from "../Day/DayCell";
+import { Menu } from "../../types";
 
 
 type Props = {
   currentMonth: Date;
-  mstTimeZone: { id: number, displayName: string }[];
+  menuList: Menu[];
+  // mstTimeZone: { id: number, displayName: string }[];
 };
 
-export const MonthView = ({ currentMonth, mstTimeZone }: Props) => {
+export const MonthView = ({ currentMonth, menuList }: Props) => {
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth),
@@ -23,9 +25,19 @@ export const MonthView = ({ currentMonth, mstTimeZone }: Props) => {
       </div>
       <div className="grid grid-cols-7 gap-x-2 gap-y-6 text-center text-sm">
         {prefixBlanks.map((_, i) => <div key={`blank-${i}`} />)}
-        {days.map((day) => (
-          <DayCell key={day.toDateString()} day={day} mstTimeZone={mstTimeZone} />
-        ))}
+        {days.map((day) => {
+          const dayMenus = menuList.filter((menu) =>
+            isSameDay(new Date(menu.date), day)
+          );
+
+          return (
+            <DayCell
+              key={day.toDateString()}
+              day={day}
+              menuList={dayMenus}
+            />
+          );
+        })}
       </div>
     </>
   );

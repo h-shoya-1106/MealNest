@@ -10,15 +10,16 @@ import { Menu, MstTimeZone } from "@prisma/client";
 
 
 export default function CalendarPage() {
-  const [menu, setMenu] = useState<Menu[]>([]);
-  const [mstTimeZone, setMstTimeZone] = useState<MstTimeZone[]>([])
+  const [menuList, setMenu] = useState<Menu[]>([]);
+  // const [mstTimeZone, setMstTimeZone] = useState<MstTimeZone[]>([]);
   const [viewMode, setViewMode] = useState<"month" | "week">("month");
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // ページ読み込み時は現在の日付を取得してapiに渡す
   // 月切り替え時はその日時を取得してapiに渡す
   useEffect(() => {
-    const dateStr = currentMonth.toISOString().split("T")[0];
+    const dateStr = currentMonth.toISOString().slice(0, 7);
+    console.log(new Date(dateStr))
 
     const userId = 1; // test用
     const fetchMenu = async () => {
@@ -30,14 +31,15 @@ export default function CalendarPage() {
     fetchMenu();
   }, [currentMonth]);
 
-  useEffect(() => {
-    const fetchMstTimeZone = async () => {
-      const res = await fetch('/api/mstData/mstTimeZone');
-      const data = await res.json();
-      setMstTimeZone(data);
-    };
-    fetchMstTimeZone();
-  }, []);
+  // タイムゾーンの取得
+  // useEffect(() => {
+  //   const fetchMstTimeZone = async () => {
+  //     const res = await fetch('/api/mstData/mstTimeZone');
+  //     const data = await res.json();
+  //     setMstTimeZone(data);
+  //   };
+  //   fetchMstTimeZone();
+  // }, []);
 
   // 仮データ
   const sampleWeeklyMenus: Record<string, Meal> = {
@@ -61,7 +63,7 @@ export default function CalendarPage() {
       />
 
       {viewMode === "month" ? (
-        <MonthView currentMonth={currentMonth} mstTimeZone={mstTimeZone} />
+        <MonthView currentMonth={currentMonth} menuList={menuList} />
       ) : (
         <WeekView data={sampleWeeklyMenus} onDelete={handleDelete} />
       )}

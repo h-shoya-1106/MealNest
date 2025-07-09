@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: "date and userId are required" }, { status: 400 });
     }
 
-    const menu = await getMenuByDate(Number(userIdStr), new Date(dateStr));
+    const menu = await getMenuByDate(Number(userIdStr), dateStr);
 
     return NextResponse.json(menu);
 }
