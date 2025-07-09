@@ -21,6 +21,14 @@ async function main() {
     ],
   })
 
+    await prisma.mstDishStatus.createMany({
+      data: [
+        { displayName: 'メイン', createdAt: new Date(), updatedAt: new Date() },
+        { displayName: '副菜', createdAt: new Date(), updatedAt: new Date() },
+        { displayName: '主菜', createdAt: new Date(), updatedAt: new Date() },
+      ],
+    })
+
   // 分量マスタ
   await prisma.mstQuantity.createMany({
     data: [
@@ -43,7 +51,7 @@ async function main() {
   await prisma.user.create({
     data: {
       name: 'テストユーザー',
-      email: 'test@example.com',
+      email: 'sample@example.com',
       password: 'hashedpassword123', // 本番では bcrypt でハッシュ化すること
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -51,16 +59,94 @@ async function main() {
   })
 
   // 献立（ユーザーや時間帯IDが必要なので仮で1にしてます）
-  await prisma.menu.create({
-    data: {
-      userId: 1,
-      name: 'テスト献立',
-      timeZoneId: 1,
-      calorie: 600,
-      date: new Date(), // ← 追加
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
+  await prisma.menu.createMany({
+    data: [
+      {
+        userId: 1,
+        name: 'テスト献立',
+        timeZoneId: 1,
+        calorie: 600,
+        date: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        userId: 1,
+        name: '肉じゃが定食',
+        timeZoneId: 1,
+        calorie: 600,
+        date: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+    ],
+  })
+
+  // 料理
+  await prisma.dish.createMany({
+    data: [
+      {
+        name: 'カレーライス',
+        dishStatusId: 3,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: '肉じゃが',
+        dishStatusId: 3,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: 'ジャムパン',
+        dishStatusId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: '納豆パスタ',
+        dishStatusId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
+  })
+
+  await prisma.menuDish.createMany({
+    data: [
+      {
+        menuId: 1,
+        dishId: 1,
+        quantityId: 1,
+        amount: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        menuId: 1,
+        dishId: 3,
+        quantityId: 1,
+        amount: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        menuId: 1,
+        dishId: 4,
+        quantityId: 1,
+        amount: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        menuId: 2,
+        dishId: 2,
+        quantityId: 1,
+        amount: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+    ],
   })
 
   console.log('シード完成！')
