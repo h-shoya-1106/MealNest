@@ -1,17 +1,13 @@
 import { Trash2 } from "lucide-react";
+import { Menu } from "../../types";
 
 type Props = {
   day: string;
-  meal: {
-    morning : Array<string>
-    lunch : Array<string>
-    dinner : Array<string>
-
-  };
+  menuList: Menu[]
   onDelete: (day: string) => void;
 };
 
-export const WeeklyCard = ({ day, meal, onDelete }: Props) => {
+export const WeeklyCard = ({ day, menuList, onDelete }: Props) => {
   return (
     <div className="bg-white rounded-xl shadow-md p-4 relative">
       <div className="absolute top-2 right-2 flex space-x-2">
