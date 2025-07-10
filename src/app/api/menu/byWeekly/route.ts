@@ -1,20 +1,27 @@
 // 週に応じてデータを取得したり、新規保存、編集、削除を行う
-import { getMenuByDateForMonth } from "../../../../../lib/func/menu"
+import { parseISO, isValid } from "date-fns";
+import { getMenuByDateForWeek } from "../../../../../lib/func/menu";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
+    const userId = Number(searchParams.get("userId"));
     const dateStr = searchParams.get("date");
-    const userIdStr = searchParams.get('userId');
 
-    if (!dateStr || !userIdStr) {
-    return NextResponse.json({ error: "date and userId are required" }, { status: 400 });
+    if (!userId || !dateStr) {
+    return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
     }
 
-    const date = new Date(`${dateStr}-01`);
-    const userId = Number(userIdStr);
+    const date = parseISO(dateStr);
+    if (!isValid(date)) {
+    return NextResponse.json({ error: "Invalid date format" }, { status: 400 });
+    }
 
-    const menu = await getMenuByDateForMonth(userId, date);
-
-    return NextResponse.json(menu);
+    try {
+        const menus = await getMenuByDateForWeek(userId, date);
+        return NextResponse.json(menus);
+    } catch (err) {
+        console.error("API Error (byWeekly):", err);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
 }

@@ -5,7 +5,6 @@ import { addDays, addMonths, subDays, subMonths } from "date-fns";
 import { CalendarHeader } from "../../../features/calendar/components/Header/CalendarHeader";
 import { MonthView } from "../../../features/calendar/components/Month/MonthView";
 import { WeekView } from "../../../features/calendar/components/Week/WeekView";
-import { Meal } from '../../../features/calendar/types/index';
 import { Menu, MstTimeZone } from "@prisma/client";
 
 
@@ -39,7 +38,7 @@ export default function CalendarPage() {
     const fetchMenu = async () => {
       const res = await fetch(`/api/menu/byWeekly?userId=${userId}&date=${dateStr}`);
       const data = await res.json();
-      setCurrentWeekly(data);
+      setMenuWeekly(data);
     };
 
     fetchMenu();
@@ -54,7 +53,6 @@ export default function CalendarPage() {
   //   };
   //   fetchMstTimeZone();
   // }, []);
-
 
   const handleDelete = (day: string) => {
     console.log(`Delete ${day}`);

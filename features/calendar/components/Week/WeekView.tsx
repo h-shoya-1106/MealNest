@@ -17,12 +17,24 @@ export const WeekView = ({ currentWeek, menuList, onDelete }: Props) => {
     format(addDays(start, i), "yyyy-MM-dd")
   );
 
+  const groupedByDate: Record<string, Menu[]> = {};
+
+  menuList.forEach((menu) => {
+    const dateKey = format(new Date(menu.date), "yyyy-MM-dd");
+
+    if (!groupedByDate[dateKey]) {
+      groupedByDate[dateKey] = [];
+    }
+
+    groupedByDate[dateKey].push(menu);
+  });
+
   return (
     <>
       <h1 className="text-lg font-semibold text-center mb-4">Weekly Menu</h1>
       <div className="space-y-4">
         {daysOfWeek.map((day) => (
-          <WeeklyCard key={day} day={day} menuList={menuList[day] || {}} onDelete={onDelete} />
+          <WeeklyCard key={day} day={day} menuList={groupedByDate[day] || []} onDelete={onDelete} />
         ))}
       </div>
     </>
