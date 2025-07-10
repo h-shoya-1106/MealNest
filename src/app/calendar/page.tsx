@@ -8,6 +8,7 @@ import { WeekView } from "../../../features/calendar/components/Week/WeekView";
 import { Modal } from "../../../features/calendar/components/Day/Modal";
 import { Menu, MstTimeZone } from "@prisma/client";
 import { isSameDay, format } from "date-fns";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function CalendarPage() {
   const [mstTimeZone, setMstTimeZone] = useState<MstTimeZone[]>([]);
@@ -17,42 +18,29 @@ export default function CalendarPage() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [currentWeekly, setCurrentWeekly] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // ページ読み込み時は現在の日付を取得してapiに渡す
-  // 月切り替え時はその日時を取得してapiに渡す
   useEffect(() => {
-    const dateStr = currentMonth.toISOString().slice(0, 7);
-
-    const userId = 1; // test用
     const fetchMenu = async () => {
+      const dateStr = currentMonth.toISOString().slice(0, 7);
+      const userId = 1; // test用
       const res = await fetch(`/api/menu/byMonth?userId=${userId}&&date=${dateStr}`);
       const data = await res.json();
       setMenuMonth(data);
     };
-
     fetchMenu();
   }, [currentMonth]);
 
   useEffect(() => {
-    const dateStr = currentWeekly.toISOString().slice(0, 10);
-
-    const userId = 1; // test用
     const fetchMenu = async () => {
+      const dateStr = currentWeekly.toISOString().slice(0, 10);
+      const userId = 1; // test用
       const res = await fetch(`/api/menu/byWeekly?userId=${userId}&date=${dateStr}`);
       const data = await res.json();
       setMenuWeekly(data);
     };
-
     fetchMenu();
   }, [currentWeekly]);
 
-  const handleDateClick = (date: Date) => {
-    setSelectedDate(date);
-    setIsModalOpen(true);
-  };
-
-  // タイムゾーンの取得
   useEffect(() => {
     const fetchMstTimeZone = async () => {
       const res = await fetch('/api/mstData/mstTimeZone');
@@ -61,6 +49,17 @@ export default function CalendarPage() {
     };
     fetchMstTimeZone();
   }, []);
+
+  // 週表示になったらスライドを消す
+  useEffect(() => {
+    if (viewMode === "week") {
+      setSelectedDate(null);
+    }
+  }, [viewMode]);
+
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+  };
 
   const handleDelete = (day: string) => {
     console.log(`Delete ${day}`);
@@ -72,18 +71,12 @@ export default function CalendarPage() {
         currentMonth={viewMode === "month" ? currentMonth : currentWeekly}
         viewMode={viewMode}
         onPrev={() => {
-          if (viewMode === "month") {
-            setCurrentMonth(subMonths(currentMonth, 1));
-          } else {
-            setCurrentWeekly((prev) => subDays(prev, 7)); // ← 週を1つ前に
-          }
+          if (viewMode === "month") setCurrentMonth(subMonths(currentMonth, 1));
+          else setCurrentWeekly((prev) => subDays(prev, 7));
         }}
         onNext={() => {
-          if (viewMode === "month") {
-            setCurrentMonth(addMonths(currentMonth, 1));
-          } else {
-            setCurrentWeekly((prev) => addDays(prev, 7)); // ← 週を1つ後に
-          }
+          if (viewMode === "month") setCurrentMonth(addMonths(currentMonth, 1));
+          else setCurrentWeekly((prev) => addDays(prev, 7));
         }}
         onChangeView={setViewMode}
       />
@@ -95,31 +88,43 @@ export default function CalendarPage() {
           onSelectDate={handleDateClick}
         />
       ) : (
-        <WeekView currentWeek={currentWeekly} menuList={menuWeeklyList} onDelete={handleDelete} />
+        <WeekView
+          currentWeek={currentWeekly}
+          menuList={menuWeeklyList}
+          onDelete={handleDelete}
+        />
       )}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        {selectedDate && (
-          <div>
-            <h2 className="text-lg font-bold mb-4 text-center">
+
+      <AnimatePresence>
+        {selectedDate && viewMode === "month" && (
+          <motion.div
+            key="slide-panel"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.3 }}
+            className="mt-6 p-4 bg-gray-100 rounded-lg shadow"
+          >
+            <h2 className="text-lg font-bold mb-2 text-center">
               {format(selectedDate, "yyyy/MM/dd")}
             </h2>
             <div className="space-y-2 text-sm">
-              {mstTimeZone.map((zone) => {
+              {mstTimeZone.map((label) => {
                 const meal = menuMonthList.find(
                   (menu) =>
                     isSameDay(new Date(menu.date), selectedDate) &&
-                    menu.timeZoneId === zone.id
+                    menu.timeZoneId === label.id
                 );
                 return (
-                  <p key={zone.id}>
-                    {zone.displayName}: {meal ? meal.name : "register"}
+                  <p key={label.id}>
+                    {label.displayName}: {meal ? meal.name : "register"}
                   </p>
                 );
               })}
             </div>
-          </div>
+          </motion.div>
         )}
-      </Modal>
+      </AnimatePresence>
     </div>
   );
 }
