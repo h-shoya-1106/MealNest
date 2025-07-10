@@ -6,10 +6,11 @@ import { Menu } from "../../types";
 type Props = {
   currentMonth: Date;
   menuList: Menu[];
+  onSelectDate: (date: Date) => void;
   // mstTimeZone: { id: number, displayName: string }[];
 };
 
-export const MonthView = ({ currentMonth, menuList }: Props) => {
+export const MonthView = ({ currentMonth, menuList, onSelectDate }: Props) => {
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth),
@@ -35,6 +36,7 @@ export const MonthView = ({ currentMonth, menuList }: Props) => {
               key={day.toDateString()}
               day={day}
               menuList={dayMenus}
+              onClick={() => onSelectDate(day)}
             />
           );
         })}

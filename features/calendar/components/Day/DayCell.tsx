@@ -5,12 +5,14 @@ import { Menu } from "../../types";
 type Props = {
   day: Date;
   menuList: Menu[];
+  onClick?: () => void;
 };
 
-export const DayCell = ({ day, menuList }: Props) => {
+export const DayCell = ({ day, menuList, onClick }: Props) => {
   return (
     <div className="flex flex-col items-center space-y-1">
       <button
+        onClick={onClick}
         className={`w-8 h-8 rounded-full flex items-center justify-center ${
           isToday(day) ? "bg-blue-500 text-white" : "text-black"
         }`}
