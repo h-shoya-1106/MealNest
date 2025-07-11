@@ -5,10 +5,11 @@ import { addDays, addMonths, subDays, subMonths } from "date-fns";
 import { CalendarHeader } from "../../../features/calendar/components/Header/CalendarHeader";
 import { MonthView } from "../../../features/calendar/components/Month/MonthView";
 import { WeekView } from "../../../features/calendar/components/Week/WeekView";
-import { Modal } from "../../../features/calendar/components/Day/Modal";
 import { Menu, MstTimeZone } from "@prisma/client";
 import { isSameDay, format } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
+import { MenuCard } from "../../../features/calendar/components/Common/MenuCard";
+import { useRouter } from "next/navigation";
 
 export default function CalendarPage() {
   const [mstTimeZone, setMstTimeZone] = useState<MstTimeZone[]>([]);
@@ -18,6 +19,7 @@ export default function CalendarPage() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [currentWeekly, setCurrentWeekly] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -103,25 +105,17 @@ export default function CalendarPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.3 }}
-            className="mt-6 p-4 bg-gray-100 rounded-lg shadow"
+            className="mt-6"
           >
-            <h2 className="text-lg font-bold mb-2 text-center">
-              {format(selectedDate, "yyyy/MM/dd")}
-            </h2>
-            <div className="space-y-2 text-sm">
-              {mstTimeZone.map((label) => {
-                const meal = menuMonthList.find(
-                  (menu) =>
-                    isSameDay(new Date(menu.date), selectedDate) &&
-                    menu.timeZoneId === label.id
-                );
-                return (
-                  <p key={label.id}>
-                    {label.displayName}: {meal ? meal.name : "register"}
-                  </p>
-                );
-              })}
-            </div>
+            <MenuCard
+              day={format(selectedDate, "yyyy-MM-dd")}
+              menuList={menuMonthList.filter((menu) =>
+                isSameDay(new Date(menu.date), selectedDate)
+              )}
+              onDelete={handleDelete}
+              onEdit={(dateStr) => router.push(`/calendar/menu/${dateStr}`)}
+              isMonthView
+            />
           </motion.div>
         )}
       </AnimatePresence>

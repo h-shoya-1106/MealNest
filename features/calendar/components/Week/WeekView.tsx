@@ -1,6 +1,6 @@
 import { startOfWeek, addDays, format } from "date-fns";
 import { Menu } from "../../types";
-import { WeeklyCard } from "./weeklyCard";
+import { MenuCard } from "../Common/MenuCard";
 
 type Props = {
   currentWeek: Date;
@@ -33,9 +33,14 @@ export const WeekView = ({ currentWeek, menuList, onDelete }: Props) => {
     <>
       <h1 className="text-lg font-semibold text-center mb-4">Weekly Menu</h1>
       <div className="space-y-4">
-        {daysOfWeek.map((day) => (
-          <WeeklyCard key={day} day={day} menuList={groupedByDate[day] || []} onDelete={onDelete} />
-        ))}
+      {daysOfWeek.map((day) => (
+        <MenuCard
+          key={day}
+          day={day}
+          menuList={groupedByDate[day] || []}
+          onDelete={onDelete}
+        />
+      ))}
       </div>
     </>
   );
