@@ -74,48 +74,30 @@ export async function getMenuByDateForWeek(userId: number, date: Date) {
     });
 }
 
-export async function getMenuByDateForMonth(userId: number, date: Date) {
-    return await prisma.menu.findMany({
+export async function getMenuByDateForMonth(userId: number, date: Date) { 
+  return await prisma.menu.findMany({
     where: {
-        userId,
-        date: {
+      userId,
+      date: {
         gte: startOfMonth(date),
         lte: endOfMonth(date),
-        },
+      },
     },
     orderBy: {
-        timeZoneId: "asc",
+      timeZoneId: "asc",
     },
-    select: {
-        id: true,
-        name: true,
-        date: true,
-        timeZone: {
-        select: {
-            displayName: true,
-        },
-        },
-        menuDishes: {
-        select: {
-            id: true,
-            amount: true,
-            dish: {
-            select: {
-                name: true,
-                dishStatus: {
-                select: {
-                    displayName: true,
-                },
-                },
+    include: {
+      timeZone: true,
+      menuDishes: {
+        include: {
+          dish: {
+            include: {
+              dishStatus: true,
             },
-            },
-            quantity: {
-            select: {
-                displayName: true,
-            },
-            },
+          },
+          quantity: true,
         },
-        },
+      },
     },
-    });
+  });
 }
