@@ -3,7 +3,8 @@ export type Menu = {
   id: number;
   name: string;
   date: string;
-  timeZone: {
+    timeZone: {
+    id: number;
     displayName: string;
   };
   menuDishes: any[];
