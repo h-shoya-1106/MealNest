@@ -63,6 +63,10 @@ export default function CalendarPage() {
     setSelectedDate(date);
   };
 
+  const handleEdit = (day: string) => {
+    router.push(`/calendar/menu/${day}`)
+  };
+
   const handleDelete = (day: string) => {
     console.log(`Delete ${day}`);
   };
@@ -94,6 +98,7 @@ export default function CalendarPage() {
           currentWeek={currentWeekly}
           menuList={menuWeeklyList}
           onDelete={handleDelete}
+          onEdit={handleEdit}
         />
       )}
 
@@ -113,7 +118,7 @@ export default function CalendarPage() {
                 isSameDay(new Date(menu.date), selectedDate)
               )}
               onDelete={handleDelete}
-              onEdit={(dateStr) => router.push(`/calendar/menu/${dateStr}`)}
+              onEdit={handleEdit}
               isMonthView
             />
           </motion.div>
