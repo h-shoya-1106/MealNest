@@ -17,8 +17,13 @@ export default function MenuFormPage() {
     {
       name: "",
       dishStatusId: "",
-      quantityId: "",
-      amount: ""
+      materials: [
+        {
+          materialName: "",
+          quantityId: "",
+          amount: ""
+        }
+      ]
     }
   ]);
 
@@ -28,12 +33,36 @@ export default function MenuFormPage() {
     setDishes(newDishes);
   };
 
+  const handleMaterialChange = (
+    dishIndex: number,
+    materialIndex: number,
+    field: string,
+    value: string
+  ) => {
+    const updated = [...dishes];
+    updated[dishIndex].materials[materialIndex][field] = value;
+    setDishes(updated);
+  };
+
+  const addMaterial = (dishIndex: number) => {
+    const updated = [...dishes];
+    updated[dishIndex].materials.push({ materialName: "", quantityId: "", amount: "" });
+    setDishes(updated);
+  };
+
   const addDish = () => {
     setDishes([
       ...dishes,
-      { name: "", dishStatusId: "", quantityId: "", amount: "" }
+      {
+        name: "",
+        dishStatusId: "",
+        materials: [
+          { materialName: "", quantityId: "", amount: "" }
+        ]
+      }
     ]);
   };
+  console.log(dishes)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,16 +75,19 @@ export default function MenuFormPage() {
       dishes: dishes.map((dish) => ({
         name: dish.name,
         dishStatusId: Number(dish.dishStatusId),
-        quantityId: Number(dish.quantityId),
-        amount: dish.amount ? Number(dish.amount) : null,
-      })),
+        materials: dish.materials.map((m) => ({
+          materialName: m.materialName,
+          quantityId: Number(m.quantityId),
+          amount: m.amount ? Number(m.amount) : null
+        }))
+      }))
     };
 
     try {
       const res = await fetch("/api/menu/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
 
       const result = await res.json();
@@ -127,24 +159,38 @@ export default function MenuFormPage() {
                 <option value="4">メイン</option>
               </select>
 
-              <select
-                value={dish.quantityId}
-                onChange={(e) => handleDishChange(index, "quantityId", e.target.value)}
-                className="w-full border rounded px-3 py-2 text-sm"
-              >
-                <option value="">分量区分を選択</option>
-                <option value="1">大さじ</option>
-                <option value="2">小さじ</option>
-                <option value="3">g</option>
-                <option value="4">枚</option>
-              </select>
-
-              <Input
-                placeholder="量 (数字のみ)"
-                type="number"
-                value={dish.amount}
-                onChange={(e) => handleDishChange(index, "amount", e.target.value)}
-              />
+              <div className="pl-2 border-l border-gray-300 space-y-2">
+                <h3 className="text-sm font-semibold">食材の登録</h3>
+                {dish.materials.map((material, matIndex) => (
+                  <div key={matIndex} className="space-y-1">
+                    <Input
+                      placeholder="食材名"
+                      value={material.materialName}
+                      onChange={(e) => handleMaterialChange(index, matIndex, "materialName", e.target.value)}
+                    />
+                    <Input
+                      placeholder="量"
+                      type="number"
+                      value={material.amount}
+                      onChange={(e) => handleMaterialChange(index, matIndex, "amount", e.target.value)}
+                    />
+                    <select
+                      value={material.quantityId}
+                      onChange={(e) => handleMaterialChange(index, matIndex, "quantityId", e.target.value)}
+                      className="w-full border rounded px-3 py-2 text-sm"
+                    >
+                      <option value="">分量区分を選択</option>
+                      <option value="1">大さじ</option>
+                      <option value="2">小さじ</option>
+                      <option value="3">g</option>
+                      <option value="4">枚</option>
+                    </select>
+                  </div>
+                ))}
+                <Button type="button" size="sm" variant="outline" onClick={() => addMaterial(index)}>
+                  食材を追加
+                </Button>
+              </div>
             </div>
           ))}
           <Button type="button" onClick={addDish} variant="outline" className="w-full">

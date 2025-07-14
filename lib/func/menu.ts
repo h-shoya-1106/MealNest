@@ -24,7 +24,6 @@ export async function getMenuByDate(userId: number, date: Date) {
             menuDishes: {
             select: {
                 id: true,
-                amount: true,
                 dish: {
                 select: {
                     name: true,
@@ -33,11 +32,6 @@ export async function getMenuByDate(userId: number, date: Date) {
                         displayName: true,
                     },
                     },
-                },
-                },
-                quantity: {
-                select: {
-                    displayName: true,
                 },
                 },
             },
@@ -59,12 +53,11 @@ export async function getMenuByDateForWeek(userId: number, date: Date) {
         timeZone: true,
         menuDishes: {
         include: {
-            dish: {
+          dish: {
             include: {
                 dishStatus: true,
             },
-            },
-            quantity: true,
+          },
         },
         },
     },
@@ -95,7 +88,6 @@ export async function getMenuByDateForMonth(userId: number, date: Date) {
               dishStatus: true,
             },
           },
-          quantity: true,
         },
       },
     },
