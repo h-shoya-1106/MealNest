@@ -6,9 +6,10 @@ type Props = {
   currentWeek: Date;
   menuList: Menu[];
   onDelete: (day: string) => void;
+  onEdit: (day: string) => void;
 };
 
-export const WeekView = ({ currentWeek, menuList, onDelete }: Props) => {
+export const WeekView = ({ currentWeek, menuList, onDelete, onEdit }: Props) => {
   // 日曜始まりで週の開始日を取得
   const start = startOfWeek(currentWeek, { weekStartsOn: 0 });
 
@@ -39,6 +40,7 @@ export const WeekView = ({ currentWeek, menuList, onDelete }: Props) => {
           day={day}
           menuList={groupedByDate[day] || []}
           onDelete={onDelete}
+          onEdit={onEdit}
         />
       ))}
       </div>
