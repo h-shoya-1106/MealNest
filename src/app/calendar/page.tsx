@@ -64,7 +64,7 @@ export default function CalendarPage() {
   };
 
   const handleEdit = (day: string) => {
-    router.push(`/calendar/menu/${day}`)
+    router.push(`/calendar/menu/${day}/edit`)
   };
 
   const handleDelete = (day: string) => {
