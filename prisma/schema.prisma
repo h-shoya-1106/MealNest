@@ -51,6 +51,7 @@ model Dish {
   deletedAt      DateTime?      @map("deleted_at")
 
   menuDishes     MenuDish[]
+  dishMaterials  DishMaterial[]
 }
 
 model MstMaterial {
@@ -58,6 +59,8 @@ model MstMaterial {
   displayName String
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  dishMaterials  DishMaterial[]
 }
 
 model MstQuantity {
@@ -104,6 +107,16 @@ model MenuDish {
   quantity    MstQuantity @relation(fields: [quantityId], references: [id])
   quantityId  Int         @map("quantity_id")
   amount      Int?  // "適量"はnullで対応
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt      @map("updated_at")
+}
+
+model DishMaterial {
+  id          Int         @id @default(autoincrement())
+  dish        Dish        @relation(fields: [dishId], references: [id])
+  dishId      Int         @map("dish_id")
+  material    MstMaterial @relation(fields: [materialId], references: [id])
+  materialId  Int         @map("material_id")
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt      @map("updated_at")
 }
