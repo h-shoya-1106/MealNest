@@ -35,10 +35,34 @@ export default function MenuFormPage() {
     ]);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ date, menuName, calorie, timeZoneId, dishes });
-    // 今後: API で保存
+
+    const payload = {
+      date,
+      menuName,
+      calorie: Number(calorie),
+      timeZoneId: Number(timeZoneId),
+      dishes: dishes.map((dish) => ({
+        name: dish.name,
+        dishStatusId: Number(dish.dishStatusId),
+        quantityId: Number(dish.quantityId),
+        amount: dish.amount ? Number(dish.amount) : null,
+      })),
+    };
+
+    try {
+      const res = await fetch("/api/menu/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+      console.log("登録成功:", result);
+    } catch (err) {
+      console.error("登録失敗:", err);
+    }
   };
 
   return (
