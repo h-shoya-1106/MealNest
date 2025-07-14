@@ -117,32 +117,24 @@ async function main() {
       {
         menuId: 1,
         dishId: 1,
-        quantityId: 1,
-        amount: 2,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         menuId: 1,
         dishId: 3,
-        quantityId: 1,
-        amount: 2,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         menuId: 1,
         dishId: 4,
-        quantityId: 1,
-        amount: 2,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         menuId: 2,
         dishId: 2,
-        quantityId: 1,
-        amount: 2,
         createdAt: new Date(),
         updatedAt: new Date()
       },
