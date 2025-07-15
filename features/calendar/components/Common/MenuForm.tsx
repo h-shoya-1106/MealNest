@@ -77,7 +77,7 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
     };
 
     const method = isEdit ? "PUT" : "POST";
-    const url = isEdit ? `/api/menu/${menuId}/update` : "/api/menu/create";
+    const url = isEdit ? `/api/menu/by-id/${menuId}/update` : "/api/menu/create";
 
     try {
       const res = await fetch(url, {
