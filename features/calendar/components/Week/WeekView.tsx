@@ -1,16 +1,18 @@
 import { startOfWeek, addDays, format } from "date-fns";
 import { Menu } from "../../types";
 import { MenuCard } from "../Common/MenuCard";
+import { MstTimeZone } from "@prisma/client";
 
 type Props = {
   currentWeek: Date;
   menuList: Menu[];
+  mstTimeZone: MstTimeZone[];
   onDelete: (day: string) => void;
   onEdit: (day: string) => void;
   onCreate: (day: string) => void;
 };
 
-export const WeekView = ({ currentWeek, menuList, onDelete, onEdit, onCreate }: Props) => {
+export const WeekView = ({ currentWeek, menuList, mstTimeZone, onDelete, onEdit, onCreate }: Props) => {
   // 日曜始まりで週の開始日を取得
   const start = startOfWeek(currentWeek, { weekStartsOn: 0 });
 
@@ -40,6 +42,7 @@ export const WeekView = ({ currentWeek, menuList, onDelete, onEdit, onCreate }: 
           key={day}
           day={day}
           menuList={groupedByDate[day] || []}
+          mstTimeZone={mstTimeZone}
           onDelete={onDelete}
           onEdit={onEdit}
           onCreate={onCreate}
