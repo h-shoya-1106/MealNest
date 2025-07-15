@@ -8,10 +8,11 @@ export type MenuCardProps = {
     menuList: Menu[];
     onDelete: (day: string) => void;
     onEdit?: (day: string) => void;
+    onCreate?: (day: string) => void;
     isMonthView?: boolean;
 };
 
-export const MenuCard = ({ day, menuList, onDelete, onEdit, isMonthView = false }: MenuCardProps) => {
+export const MenuCard = ({ day, menuList, onDelete, onEdit, onCreate, isMonthView = false }: MenuCardProps) => {
     const title = isMonthView
         ? format(new Date(day), "yyyy/MM/dd")
         : format(new Date(day), "EEEE");
@@ -27,16 +28,16 @@ export const MenuCard = ({ day, menuList, onDelete, onEdit, isMonthView = false 
         <div className="absolute top-2 right-2 flex space-x-2">
             {onEdit && (
                 <button
-                onClick={() => onEdit(day)}
-                className={hasMeal ? "text-blue-500 hover:text-blue-700" : "text-green-500 hover:text-green-700"}
+                    onClick={() => (hasMeal ? onEdit?.(day) : onCreate?.(day))}
+                    className={hasMeal ? "text-blue-500 hover:text-blue-700" : "text-green-500 hover:text-green-700"}
                 >
                 {hasMeal ? <Pencil size={16} /> : <Plus size={16} />}
                 </button>
             )}
             {hasMeal && (
                 <button
-                onClick={() => onDelete(day)}
-                className="text-red-500 hover:text-red-700"
+                    onClick={() => onDelete(day)}
+                    className="text-red-500 hover:text-red-700"
                 >
                 <Trash2 size={16} />
                 </button>
@@ -68,6 +69,6 @@ export const MenuCard = ({ day, menuList, onDelete, onEdit, isMonthView = false 
             {cardContent}
         </motion.div>
     ) : (
-    cardContent
+        cardContent
     );
 };
