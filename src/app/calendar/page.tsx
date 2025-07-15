@@ -71,8 +71,34 @@ export default function CalendarPage() {
     router.push(`/calendar/menu/${day}/edit`);
   };
 
-  const handleDelete = (day: string) => {
-    console.log(`Delete ${day}`);
+  const handleDelete = async (menuId: number) => {
+    if (!confirm("この献立を削除しますか？")) return;
+
+    try {
+      const res = await fetch(`/api/menu/by-id/${menuId}/delete`, {
+        method: "DELETE",
+      });
+      const result = await res.json();
+      console.log("削除結果:", result);
+
+      // 削除後に再取得 or ステート更新
+      if (viewMode === "month") {
+        const dateStr = currentMonth.toISOString().slice(0, 7);
+        const res = await fetch(`/api/menu/byMonth?userId=1&&date=${dateStr}`);
+        const data = await res.json();
+        setMenuMonth(data);
+      } else {
+        const dateStr = currentWeekly.toISOString().slice(0, 10);
+        const res = await fetch(`/api/menu/byWeekly?userId=1&date=${dateStr}`);
+        const data = await res.json();
+        setMenuWeekly(data);
+      }
+
+      setSelectedDate(null);
+    } catch (error) {
+      console.error("削除エラー:", error);
+      alert("削除に失敗しました");
+    }
   };
 
   return (
@@ -101,7 +127,7 @@ export default function CalendarPage() {
         <WeekView
           currentWeek={currentWeekly}
           menuList={menuWeeklyList}
-          onDelete={handleDelete}
+          onDelete={(menuId) => handleDelete(menuId)}
           onEdit={handleEdit}
           onCreate={handleCreate}
         />
@@ -122,7 +148,7 @@ export default function CalendarPage() {
               menuList={menuMonthList.filter((menu) =>
                 isSameDay(new Date(menu.date), selectedDate)
               )}
-              onDelete={handleDelete}
+              onDelete={(menuId) => handleDelete(menuId)}
               onEdit={handleEdit}
               onCreate={handleCreate}
               isMonthView
