@@ -63,8 +63,12 @@ export default function CalendarPage() {
     setSelectedDate(date);
   };
 
+  const handleCreate = (day: string) => {
+    router.push(`/calendar/menu/${day}/create`);
+  };
+
   const handleEdit = (day: string) => {
-    router.push(`/calendar/menu/${day}/edit`)
+    router.push(`/calendar/menu/${day}/edit`);
   };
 
   const handleDelete = (day: string) => {
@@ -99,6 +103,7 @@ export default function CalendarPage() {
           menuList={menuWeeklyList}
           onDelete={handleDelete}
           onEdit={handleEdit}
+          onCreate={handleCreate}
         />
       )}
 
@@ -119,6 +124,7 @@ export default function CalendarPage() {
               )}
               onDelete={handleDelete}
               onEdit={handleEdit}
+              onCreate={handleCreate}
               isMonthView
             />
           </motion.div>
