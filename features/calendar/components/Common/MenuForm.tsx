@@ -1,33 +1,100 @@
 "use client";
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../../../src/components/ui/input";
+import { Button } from "../../../../src/components/ui/button";
 
-export default function MenuFormPage() {
-  const { date } = useParams();
+type Material = {
+  materialName: string;
+  quantityId: string;
+  amount: string;
+};
 
+type Dish = {
+  name: string;
+  dishStatusId: string;
+  materials: Material[];
+};
+
+type MenuFormProps = {
+  date: string;
+  isEdit?: boolean;
+  initialData?: any; // DB取得結果
+};
+
+export default function MenuForm({ date, isEdit = false, initialData }: MenuFormProps) {
   const [menuName, setMenuName] = useState("");
   const [calorie, setCalorie] = useState("");
   const [timeZoneId, setTimeZoneId] = useState("");
+  const [menuId, setMenuId] = useState<number | null>(null);
 
-  const [dishes, setDishes] = useState([
+  const [dishes, setDishes] = useState<Dish[]>([
     {
       name: "",
       dishStatusId: "",
-      materials: [
-        {
-          materialName: "",
-          quantityId: "",
-          amount: ""
-        }
-      ]
-    }
+      materials: [{ materialName: "", quantityId: "", amount: "" }],
+    },
   ]);
 
-  const handleDishChange = (index: number, field: string, value: string) => {
+  // 初期値をセット（編集モードのみ）
+  useEffect(() => {
+    if (isEdit && initialData) {
+      setMenuId(initialData.id);
+      setMenuName(initialData.name);
+      setCalorie(initialData.calorie?.toString() || "");
+      setTimeZoneId(initialData.timeZoneId?.toString() || "");
+      setDishes(
+        initialData.menuDishes.map((md: any) => ({
+          name: md.dish.name,
+          dishStatusId: md.dish.dishStatusId?.toString() || "",
+          materials: md.dish.dishMaterials.map((m: any) => ({
+            materialName: m.material.displayName,
+            quantityId: m.quantity.id.toString(),
+            amount: m.amount?.toString() || "",
+          })),
+        }))
+      );
+    }
+  }, [initialData, isEdit]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const payload = {
+      menuName,
+      calorie: Number(calorie),
+      timeZoneId: Number(timeZoneId),
+      dishes: dishes.map((dish) => ({
+        name: dish.name,
+        dishStatusId: Number(dish.dishStatusId),
+        materials: dish.materials.map((m) => ({
+          materialName: m.materialName,
+          quantityId: Number(m.quantityId),
+          amount: m.amount ? Number(m.amount) : null,
+        })),
+      })),
+    };
+
+    const method = isEdit ? "PUT" : "POST";
+    const url = isEdit ? `/api/menu/by-id/${menuId}/update` : "/api/menu/create";
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...payload, date }),
+      });
+
+      const result = await res.json();
+      console.log(isEdit ? "更新成功" : "登録成功", result);
+    } catch (err) {
+      console.error("送信エラー:", err);
+    }
+  };
+
+  // フォーム操作ロジック（新規追加・編集）
+  const handleDishChange = (index: number, field: keyof Dish, value: string) => {
     const newDishes = [...dishes];
     newDishes[index][field] = value;
     setDishes(newDishes);
@@ -36,7 +103,7 @@ export default function MenuFormPage() {
   const handleMaterialChange = (
     dishIndex: number,
     materialIndex: number,
-    field: string,
+    field: keyof Material,
     value: string
   ) => {
     const updated = [...dishes];
@@ -56,51 +123,15 @@ export default function MenuFormPage() {
       {
         name: "",
         dishStatusId: "",
-        materials: [
-          { materialName: "", quantityId: "", amount: "" }
-        ]
-      }
+        materials: [{ materialName: "", quantityId: "", amount: "" }],
+      },
     ]);
-  };
-  console.log(dishes)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const payload = {
-      date,
-      menuName,
-      calorie: Number(calorie),
-      timeZoneId: Number(timeZoneId),
-      dishes: dishes.map((dish) => ({
-        name: dish.name,
-        dishStatusId: Number(dish.dishStatusId),
-        materials: dish.materials.map((m) => ({
-          materialName: m.materialName,
-          quantityId: Number(m.quantityId),
-          amount: m.amount ? Number(m.amount) : null
-        }))
-      }))
-    };
-
-    try {
-      const res = await fetch("/api/menu/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      const result = await res.json();
-      console.log("登録成功:", result);
-    } catch (err) {
-      console.error("登録失敗:", err);
-    }
   };
 
   return (
     <div className="max-w-md mx-auto p-4">
       <h1 className="text-lg font-bold text-center mb-4">
-        {format(new Date(date as string), "yyyy/MM/dd")} の献立登録
+        {format(new Date(date), "yyyy/MM/dd")} の献立{isEdit ? "編集" : "登録"}
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -139,7 +170,7 @@ export default function MenuFormPage() {
         </div>
 
         <div className="space-y-2">
-          <h2 className="font-semibold text-md">料理の登録</h2>
+          <h2 className="font-semibold text-md">料理の{isEdit ? "編集" : "登録"}</h2>
           {dishes.map((dish, index) => (
             <div key={index} className="border rounded p-3 space-y-2">
               <Input
@@ -160,23 +191,29 @@ export default function MenuFormPage() {
               </select>
 
               <div className="pl-2 border-l border-gray-300 space-y-2">
-                <h3 className="text-sm font-semibold">食材の登録</h3>
+                <h3 className="text-sm font-semibold">食材の{isEdit ? "編集" : "登録"}</h3>
                 {dish.materials.map((material, matIndex) => (
                   <div key={matIndex} className="space-y-1">
                     <Input
                       placeholder="食材名"
                       value={material.materialName}
-                      onChange={(e) => handleMaterialChange(index, matIndex, "materialName", e.target.value)}
+                      onChange={(e) =>
+                        handleMaterialChange(index, matIndex, "materialName", e.target.value)
+                      }
                     />
                     <Input
                       placeholder="量"
                       type="number"
                       value={material.amount}
-                      onChange={(e) => handleMaterialChange(index, matIndex, "amount", e.target.value)}
+                      onChange={(e) =>
+                        handleMaterialChange(index, matIndex, "amount", e.target.value)
+                      }
                     />
                     <select
                       value={material.quantityId}
-                      onChange={(e) => handleMaterialChange(index, matIndex, "quantityId", e.target.value)}
+                      onChange={(e) =>
+                        handleMaterialChange(index, matIndex, "quantityId", e.target.value)
+                      }
                       className="w-full border rounded px-3 py-2 text-sm"
                     >
                       <option value="">分量区分を選択</option>
@@ -187,7 +224,12 @@ export default function MenuFormPage() {
                     </select>
                   </div>
                 ))}
-                <Button type="button" size="sm" variant="outline" onClick={() => addMaterial(index)}>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => addMaterial(index)}
+                >
                   食材を追加
                 </Button>
               </div>
@@ -199,7 +241,7 @@ export default function MenuFormPage() {
         </div>
 
         <div className="text-center">
-          <Button type="submit">保存</Button>
+          <Button type="submit">{isEdit ? "更新" : "保存"}</Button>
         </div>
       </form>
     </div>
