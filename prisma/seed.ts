@@ -32,9 +32,11 @@ async function main() {
   // 分量マスタ
   await prisma.mstQuantity.createMany({
     data: [
-      { displayName: '大さじ1杯', createdAt: new Date(), updatedAt: new Date() },
-      { displayName: '100g', createdAt: new Date(), updatedAt: new Date() },
-      { displayName: '1個', createdAt: new Date(), updatedAt: new Date() },
+      { displayName: 'g', createdAt: new Date(), updatedAt: new Date() },
+      { displayName: '大さじ', createdAt: new Date(), updatedAt: new Date() },
+      { displayName: '小さじ', createdAt: new Date(), updatedAt: new Date() },
+      { displayName: '個', createdAt: new Date(), updatedAt: new Date() },
+      { displayName: '枚', createdAt: new Date(), updatedAt: new Date() },
     ],
   })
 
