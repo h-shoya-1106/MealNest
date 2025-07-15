@@ -33,6 +33,9 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
   const [dishes, setDishes] = useState<Dish[]>([
     { name: "", dishStatusId: "", materials: [{ materialName: "", quantityId: "", amount: "" }] },
   ]);
+  const [timeZones, setTimeZones] = useState([]);
+  const [dishStatuses, setDishStatuses] = useState([]);
+  const [quantities, setQuantities] = useState([]);
 
   useEffect(() => {
     if (isEdit && initialData) {
@@ -52,6 +55,20 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
       );
     }
   }, [initialData, isEdit]);
+
+  useEffect(() => {
+    const fetchMasters = async () => {
+      const [tzRes, dsRes, qRes] = await Promise.all([
+        fetch("/api/mstData/mstTimeZone"),
+        fetch("/api/mstData/mstDishStatus"),
+        fetch("/api/mstData/mstQuantity"),
+      ]);
+      setTimeZones(await tzRes.json());
+      setDishStatuses(await dsRes.json());
+      setQuantities(await qRes.json());
+    };
+    fetchMasters();
+  }, []);
 
   const handleDishChange = (index: number, field: keyof Dish, value: string) => {
     const updated = [...dishes];
@@ -174,16 +191,11 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
                 placeholder="カロリー"
                 className="text-base h-11 border-2 border-gray-200 focus:border-orange-400 rounded-lg"
               />
-              <select
-                value={timeZoneId}
-                onChange={(e) => setTimeZoneId(e.target.value)}
-                className="w-full bg-white border-2 border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 h-11"
-              >
-                <option value="">時間帯</option>
-                <option value="1">朝食</option>
-                <option value="2">昼食</option>
-                <option value="3">夕食</option>
-                <option value="4">間食</option>
+              <select value={timeZoneId} onChange={(e) => setTimeZoneId(e.target.value)} className="...">
+                <option value="">時間帯を選択</option>
+                {timeZones.map((tz) => (
+                  <option key={tz.id} value={tz.id}>{tz.displayName}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -223,13 +235,12 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
                     <select
                       value={dish.dishStatusId}
                       onChange={(e) => handleDishChange(index, "dishStatusId", e.target.value)}
-                      className="w-full bg-white border-2 border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
+                      className="..."
                     >
-                      <option value="">料理の種類を選択</option>
-                      <option value="1">🍖 主菜</option>
-                      <option value="2">🥗 副菜</option>
-                      <option value="3">🍚 主食</option>
-                      <option value="4">🍽️ メイン料理</option>
+                      <option value="">料理区分を選択</option>
+                      {dishStatuses.map((ds) => (
+                        <option key={ds.id} value={ds.id}>{ds.displayName}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -279,12 +290,10 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
                               }
                               className="w-20 bg-white border border-gray-200 rounded-md px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-orange-400"
                             >
-                              <option value="">単位</option>
-                              <option value="1">g</option>
-                              <option value="2">大さじ</option>
-                              <option value="3">小さじ</option>
-                              <option value="4">個</option>
-                              <option value="5">枚</option>
+                              <option value="">料理区分を選択</option>
+                              {quantities.map((qu) => (
+                                <option key={qu.id} value={qu.id}>{qu.displayName}</option>
+                              ))}
                             </select>
                             {dish.materials.length > 1 && (
                               <Button

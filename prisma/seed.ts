@@ -23,9 +23,10 @@ async function main() {
 
     await prisma.mstDishStatus.createMany({
       data: [
-        { displayName: 'メイン', createdAt: new Date(), updatedAt: new Date() },
-        { displayName: '副菜', createdAt: new Date(), updatedAt: new Date() },
         { displayName: '主菜', createdAt: new Date(), updatedAt: new Date() },
+        { displayName: '副菜', createdAt: new Date(), updatedAt: new Date() },
+        { displayName: '主食', createdAt: new Date(), updatedAt: new Date() },
+        { displayName: 'メイン', createdAt: new Date(), updatedAt: new Date() },
       ],
     })
 
