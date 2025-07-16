@@ -127,6 +127,7 @@ export default function CalendarPage() {
         <WeekView
           currentWeek={currentWeekly}
           menuList={menuWeeklyList}
+          mstTimeZone={mstTimeZone}
           onDelete={(menuId) => handleDelete(menuId)}
           onEdit={handleEdit}
           onCreate={handleCreate}
@@ -148,6 +149,7 @@ export default function CalendarPage() {
               menuList={menuMonthList.filter((menu) =>
                 isSameDay(new Date(menu.date), selectedDate)
               )}
+              mstTimeZone={mstTimeZone}
               onDelete={(menuId) => handleDelete(menuId)}
               onEdit={handleEdit}
               onCreate={handleCreate}

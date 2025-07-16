@@ -2,89 +2,99 @@ import { Trash2, Pencil, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { Menu } from "../../types";
+import { MstTimeZone } from "@prisma/client";
 
 export type MenuCardProps = {
-  day: string; // yyyy-MM-dd
-  menuList: Menu[];
-  onDelete: (menuId: number) => void;
-  onEdit?: (day: string) => void;
-  onCreate?: (day: string) => void;
-  isMonthView?: boolean;
+    day: string; // yyyy-MM-dd
+    menuList: Menu[];
+    mstTimeZone: MstTimeZone[];
+    onDelete: (menuId: number) => void;
+    onEdit?: (day: string, timeZone: string) => void;
+    onCreate?: (day: string) => void;
+    isMonthView?: boolean;
 };
 
 export const MenuCard = ({
-  day,
-  menuList,
-  onDelete,
-  onEdit,
-  onCreate,
-  isMonthView = false,
+    day,
+    menuList,
+    mstTimeZone,
+    onDelete,
+    onEdit,
+    onCreate,
+    isMonthView = false,
 }: MenuCardProps) => {
-  const title = isMonthView
-    ? format(new Date(day), "yyyy/MM/dd")
-    : format(new Date(day), "EEEE");
+    const title = isMonthView
+        ? format(new Date(day), "yyyy/MM/dd")
+        : format(new Date(day), "EEEE");
 
-  const morning = menuList.find((m) => m.timeZone?.displayName === "朝");
-  const lunch = menuList.find((m) => m.timeZone?.displayName === "昼");
-  const dinner = menuList.find((m) => m.timeZone?.displayName === "夜");
+    // 登録済みの時間帯のメニューのみ抽出
+    const meals = menuList.filter((meal) =>
+        mstTimeZone.some((tz) => tz.id === meal.timeZone.id)
+    );
 
-  const hasMeal = morning || lunch || dinner;
+    // まだ登録されていない時間帯があるかチェック
+    const registeredTimeZoneIds = menuList.map((m) => m.timeZone.id);
+    const showGlobalCreateButton =
+        mstTimeZone.some((tz) => !registeredTimeZoneIds.includes(tz.id));
 
-  const cardContent = (
-    <div className="bg-white rounded-xl shadow-md p-4 relative">
-      {/* 右上の操作ボタン群 */}
-      {hasMeal && (
-        <div className="absolute top-2 right-2 flex space-x-2">
-          {onEdit && (
+    const cardContent = (
+        <div className="border rounded-xl p-3 shadow-sm bg-white relative">
+        {/* タイトル + グローバル登録ボタン */}
+        <div className="flex justify-between items-center mb-2">
+            <div className="text-lg font-semibold">{title}</div>
+            {showGlobalCreateButton && onCreate && (
             <button
-              onClick={() => (hasMeal ? onEdit?.(day) : onCreate?.(day))}
-              className={hasMeal ? "text-blue-500 hover:text-blue-700" : "text-green-500 hover:text-green-700"}
+                onClick={() => onCreate(day)}
+                className="text-green-500 hover:text-green-700"
             >
-              {hasMeal ? <Pencil size={16} /> : <Plus size={16} />}
+                <Plus size={20} />
             </button>
-          )}
+            )}
+        </div>
 
-          {/* 朝・昼・夜それぞれに削除ボタンを表示 */}
-          {[morning, lunch, dinner].map(
-            (meal) =>
-              meal && (
-                <button
-                  key={meal.id}
-                  onClick={() => onDelete(meal.id)}
-                  className="text-red-500 hover:text-red-700"
+        {/* 登録済みの時間帯のみ表示 */}
+        {meals.length > 0 ? (
+            meals.map((meal) => {
+            const timeZone = mstTimeZone.find((tz) => tz.id === meal.timeZone.id);
+
+            return (
+                <div
+                key={meal.id}
+                className="flex justify-between items-center py-1"
                 >
-                  <Trash2 size={16} />
-                </button>
-              )
-          )}
+                <div>
+                    {timeZone?.displayName ?? "時間不明"}: {meal.name}
+                </div>
+                <div className="flex space-x-2">
+                    {onEdit && (
+                    <button
+                        onClick={() =>
+                        onEdit(day, timeZone?.displayName ?? "")
+                        }
+                        className="text-blue-500 hover:text-blue-700"
+                    >
+                        <Pencil size={16} />
+                    </button>
+                    )}
+                    <button
+                    onClick={() => onDelete(meal.id)}
+                    className="text-red-500 hover:text-red-700"
+                    >
+                    <Trash2 size={16} />
+                    </button>
+                </div>
+                </div>
+            );
+            })
+        ) : (
+            <div className="text-gray-500">献立が登録されていません</div>
+        )}
         </div>
-      )}
+    );
 
-      <h2 className="text-md font-bold mb-2 text-center">{title}</h2>
-
-      {hasMeal ? (
-        <div className="pl-2 space-y-1 text-sm">
-          {morning && <p>朝: {morning.name}</p>}
-          {lunch && <p>昼: {lunch.name}</p>}
-          {dinner && <p>夜: {dinner.name}</p>}
-        </div>
-      ) : (
-        <p className="text-sm text-gray-400 italic pl-2 text-center">献立が登録されていません</p>
-      )}
-    </div>
-  );
-
-  return isMonthView ? (
-    <motion.div
-      key="meal-card"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 50 }}
-      transition={{ duration: 0.3 }}
-    >
-      {cardContent}
-    </motion.div>
-  ) : (
-    cardContent
-  );
+    return isMonthView ? (
+        <motion.div layout>{cardContent}</motion.div>
+    ) : (
+        cardContent
+    );
 };
