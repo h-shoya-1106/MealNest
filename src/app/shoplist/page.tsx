@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingHeader } from "../../../features/ShopList/Header/ShoppingHeader";
 import { ProgressBar } from "../../../features/ShopList/Header/ProgressBar";
 import { MenuAccordion } from "../../../features/ShopList/MenuAccordion/MenuAccordion";
@@ -8,10 +8,36 @@ import { ShoppingList } from "../../../features/ShopList/ShopList";
 
 export default function ShopPage() {
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
-  const [selectedDates, setSelectedDates] = useState(["2025-07-16"]);
+  const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(new Date(2025, 6, 1));
+  const [currentMonth, setCurrentMonth] = useState(new Date());
   const [isAccordionOpen, setIsAccordionOpen] = useState(true);
+  const [materials, setMaterials] = useState<any[]>([]);
+  const [menuData, setMenuData] = useState<any>({});
+
+  useEffect(() => {
+    const today = new Date();
+    const todayStr = dateToString(today);
+    setSelectedDates([todayStr]);
+  }, []);
+
+  useEffect(() => {
+    if (selectedDates.length === 0) return;
+
+    const fetchData = async () => {
+        try {
+            const query = selectedDates.join(",");
+            const res = await fetch(`/api/shoplist?dates=${query}`);
+            const data = await res.json();
+            setMaterials(data.materials);
+            setMenuData(data.menuData);
+    } catch (error) {
+        console.error("データ取得に失敗しました:", error);
+    }
+  };
+
+    fetchData();
+    }, [selectedDates]);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -91,50 +117,6 @@ export default function ShopPage() {
     const checked = getCheckedCount();
     return total > 0 ? (checked / total) * 100 : 0;
   };
-
-  const menuData = {
-    "2025-07-16": {
-      breakfast: {
-        menuName: "和風朝食セット",
-        dishes: ["ご飯", "味噌汁", "焼き魚"],
-      },
-      lunch: {
-        menuName: "チキンカレーセット",
-        dishes: ["チキンカレー", "サラダ"],
-      },
-      dinner: {
-        menuName: "鮭の塩焼き定食",
-        dishes: ["鮭の塩焼き", "ご飯", "漬物"],
-      },
-    },
-  };
-
-  const materials = [
-    {
-      id: "1",
-      name: "玉ねぎ",
-      totalAmount: "2",
-      unit: "個",
-      dishes: ["味噌汁", "チキンカレー"],
-      checked: checkedItems["1"] || false,
-    },
-    {
-      id: "2",
-      name: "鶏もも肉",
-      totalAmount: "300",
-      unit: "g",
-      dishes: ["チキンカレー"],
-      checked: checkedItems["2"] || false,
-    },
-    {
-      id: "3",
-      name: "ご飯",
-      totalAmount: "2",
-      unit: "合",
-      dishes: ["和風朝食セット", "鮭の塩焼き定食"],
-      checked: checkedItems["3"] || false,
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 relative pb-24">

@@ -29,15 +29,15 @@ export const MenuAccordion = ({ isAccordionOpen, setIsAccordionOpen, selectedDat
                 return (
                 <div key={dateString} className="border border-gray-200 rounded-xl p-4 bg-orange-50">
                     <div className="mb-3 font-medium text-orange-700">{formatDate(dateString)}</div>
-                    {["breakfast", "lunch", "dinner"].map((timeZone) => {
+                    {["朝", "昼", "夜"].map((timeZone) => {
                         const meal = menuForDate[timeZone];
                         if (!meal) return null;
                         return (
                             <div key={timeZone} className="mb-4">
-                                <div className="text-sm font-semibold text-orange-600 mb-1 capitalize">
-                                    {timeZone === "breakfast" ? "朝食" : timeZone === "lunch" ? "昼食" : "夕食"}
-                                </div>
-                                <div className="text-base font-semibold text-gray-900 mb-1">{meal.menuName}</div>
+                            <div className="text-sm font-semibold text-orange-600 mb-1 capitalize">
+                                {timeZone === "朝" ? "朝食" : timeZone === "昼" ? "昼食" : "夕食"}
+                            </div>
+                            <div className="text-base font-semibold text-gray-900 mb-1">{meal.menuName}</div>
                                 <ul className="list-disc list-inside text-gray-700">
                                     {meal.dishes.map((dish: string, i: number) => (
                                         <li key={i}>{dish}</li>
