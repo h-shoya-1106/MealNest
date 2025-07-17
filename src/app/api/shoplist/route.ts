@@ -57,19 +57,34 @@ export async function GET(req: NextRequest) {
       };
     });
 
-    const materials = menus.flatMap((menu) =>
-      menu.menuDishes.flatMap((md) =>
-        md.dish.dishMaterials.map((dm) => ({
-          id: `${menu.id}-${md.dish.id}-${dm.material.id}`,
-          name: dm.material.displayName,
-          quantity: dm.quantity.displayName,
-          amount: dm.amount,
-          dishes: [md.dish.name],
-        }))
-      )
-    );
-    console.log(menuData)
+    const materialMap = new Map<string, any>();
 
+    menus.forEach((menu) => {
+      menu.menuDishes.forEach((md) => {
+        md.dish.dishMaterials.forEach((dm) => {
+          const key = dm.material.displayName;
+
+          if (!materialMap.has(key)) {
+            materialMap.set(key, {
+              id: dm.material.id,
+              name: dm.material.displayName,
+              quantity: dm.quantity.displayName,
+              totalAmount: dm.amount,
+              unit: dm.quantity.displayName ?? "",
+              dishes: [md.dish.name],
+            });
+          } else {
+            const existing = materialMap.get(key);
+            existing.dishes.push(md.dish.name);
+            existing.totalAmount += dm.amount ?? 0;
+          }
+        });
+      });
+    });
+
+    const materials = Array.from(materialMap.values());
+
+    console.log(materials)
     return NextResponse.json({ menuData, materials });
   } catch (error) {
     console.error("[shoplist] fetch error:", error);
