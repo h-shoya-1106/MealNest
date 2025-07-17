@@ -45,12 +45,12 @@ export const ShoppingList = ({ materials, toggleCheck }: any) => {
 
               <div className="text-right">
                 <div className="text-xs text-gray-400">
-                  {material.dishes.length}品目で使用
+                  {(material.dishes?.length ?? 0)}品目で使用
                 </div>
               </div>
             </div>
 
-            {material.dishes.length > 0 && (
+            {material.dishes?.length > 0 && (
               <div className="mt-2 pt-2 border-t border-gray-100">
                 <div className="flex flex-wrap gap-1">
                   {material.dishes.map((dish: string, index: number) => (
