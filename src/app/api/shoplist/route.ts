@@ -7,22 +7,24 @@ const USER_ID = 1;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const dateStr = searchParams.get("date");
+  const datesParam = searchParams.get("dates");
 
-  if (!dateStr) {
-    return NextResponse.json({ error: "date query is required" }, { status: 400 });
+  if (!datesParam) {
+    return NextResponse.json({ error: "dates query is required" }, { status: 400 });
   }
 
-  const date = new Date(dateStr);
+  const dateStrings = datesParam.split(",");
+  const dateRanges = dateStrings.map((ds) => ({
+    gte: startOfDay(new Date(ds)),
+    lte: endOfDay(new Date(ds)),
+  }));
 
   try {
+    // 複数日付に対応する where 条件を OR で構築
     const menus = await prisma.menu.findMany({
       where: {
         userId: USER_ID,
-        date: {
-          gte: startOfDay(date),
-          lte: endOfDay(date),
-        },
+        OR: dateRanges.map((range) => ({ date: range })),
       },
       include: {
         timeZone: true,
@@ -43,18 +45,18 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    // UI表示用の menuData を整形
+    // 結果を日付ごとに整形
     const menuData: Record<string, any> = {};
-    for (const menu of menus) {
+    menus.forEach((menu) => {
+      const dateStr = menu.date.toISOString().slice(0, 10);
       const zone = menu.timeZone.displayName;
       menuData[dateStr] = menuData[dateStr] || {};
       menuData[dateStr][zone] = {
         menuName: menu.name,
         dishes: menu.menuDishes.map((md) => md.dish.name),
       };
-    }
+    });
 
-    // 材料リストを抽出して結合
     const materials = menus.flatMap((menu) =>
       menu.menuDishes.flatMap((md) =>
         md.dish.dishMaterials.map((dm) => ({
@@ -62,13 +64,11 @@ export async function GET(req: NextRequest) {
           name: dm.material.displayName,
           quantity: dm.quantity.displayName,
           amount: dm.amount,
-          meals: [menu.timeZone.displayName],
+          dishes: [md.dish.name],
         }))
       )
     );
-
-    console.log(menuData, materials)
-    console.log(materials[0])
+    console.log(menuData)
 
     return NextResponse.json({ menuData, materials });
   } catch (error) {

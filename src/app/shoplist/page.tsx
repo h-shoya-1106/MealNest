@@ -19,20 +19,25 @@ export default function ShopPage() {
     const today = new Date();
     const todayStr = dateToString(today);
     setSelectedDates([todayStr]);
+  }, []);
+
+  useEffect(() => {
+    if (selectedDates.length === 0) return;
 
     const fetchData = async () => {
-      try {
-        const res = await fetch(`/api/shoplist?date=${todayStr}`);
-        const data = await res.json();
-        setMaterials(data.materials);
-        setMenuData(data.menuData);
-      } catch (error) {
+        try {
+            const query = selectedDates.join(",");
+            const res = await fetch(`/api/shoplist?dates=${query}`);
+            const data = await res.json();
+            setMaterials(data.materials);
+            setMenuData(data.menuData);
+    } catch (error) {
         console.error("データ取得に失敗しました:", error);
-      }
-    };
+    }
+  };
 
     fetchData();
-  }, []);
+    }, [selectedDates]);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
