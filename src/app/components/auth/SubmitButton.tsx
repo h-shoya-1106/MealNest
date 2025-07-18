@@ -18,6 +18,7 @@ export default function SubmitButton({ handleSubmit, isLoading}: Props) {
             <>
                 <Heart className="w-5 h-5 mr-2" />
                 ログイン
+                {/* アカウントを作成 */}
             </>
             )}
         </button>
