@@ -3,8 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { menuId: string } }
+    context: any
 ) {
+    const params = await context.params;
     const menuId = Number(params.menuId);
 
     if (isNaN(menuId)) {

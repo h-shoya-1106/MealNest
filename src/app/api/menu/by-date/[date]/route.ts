@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { date?: string } } // ← undefined 対応
+  context: { params: Promise<{ date: string }> }
 ) {
-  const { date } = params;
+  const { date } = await context.params;
 
   if (!date) {
     return NextResponse.json({ error: "日付が指定されていません" }, { status: 400 });

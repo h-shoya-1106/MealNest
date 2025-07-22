@@ -1,0 +1,170 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { addDays, addMonths, subDays, subMonths } from "date-fns";
+import { CalendarHeader } from "../../../features/calendar/components/Header/CalendarHeader";
+import { MonthView } from "../../../features/calendar/components/Month/MonthView";
+import { WeekView } from "../../../features/calendar/components/Week/WeekView";
+import { MstTimeZone } from "@prisma/client";
+import { MenuWithRelations as Menu } from "../types";
+import { isSameDay, format } from "date-fns";
+import { AnimatePresence, motion } from "framer-motion";
+import { MenuCard } from "../../../features/calendar/components/Common/MenuCard";
+import { useRouter } from "next/navigation";
+import { Session } from "next-auth";
+
+type Props = {
+  session: Session;
+};
+
+export default function CalendarPage({ session }: Props) {
+  const [mstTimeZone, setMstTimeZone] = useState<MstTimeZone[]>([]);
+  const [menuMonthList, setMenuMonth] = useState<Menu[]>([]);
+  const [menuWeeklyList, setMenuWeekly] = useState<Menu[]>([]);
+  const [viewMode, setViewMode] = useState<"month" | "week">("month");
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentWeekly, setCurrentWeekly] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const router = useRouter();
+//   const userId = session.user.id;
+  const userId = 1;
+
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      const dateStr = currentMonth.toISOString().slice(0, 7);
+      const res = await fetch(`/api/menu/byMonth?userId=${userId}&&date=${dateStr}`);
+      const data = await res.json() as Menu[];
+      setMenuMonth(data);
+    };
+    fetchMenu();
+  }, [currentMonth]);
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      const dateStr = currentWeekly.toISOString().slice(0, 10);
+      const res = await fetch(`/api/menu/byWeekly?userId=${userId}&date=${dateStr}`);
+      const data = await res.json();
+      setMenuWeekly(data);
+    };
+    fetchMenu();
+  }, [currentWeekly]);
+
+  useEffect(() => {
+    const fetchMstTimeZone = async () => {
+      const res = await fetch('/api/mstData/mstTimeZone');
+      const data = await res.json();
+      setMstTimeZone(data);
+    };
+    fetchMstTimeZone();
+  }, []);
+
+  // 週表示になったらスライドを消す
+  useEffect(() => {
+    if (viewMode === "week") {
+      setSelectedDate(null);
+    }
+  }, [viewMode]);
+
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+  };
+
+  const handleCreate = (day: string) => {
+    router.push(`/calendar/menu/${day}/create`);
+  };
+
+  const handleEdit = (day: string) => {
+    router.push(`/calendar/menu/${day}/edit`);
+  };
+
+  const handleDelete = async (menuId: number) => {
+    if (!confirm("この献立を削除しますか？")) return;
+
+    try {
+      const res = await fetch(`/api/menu/by-id/${menuId}/delete`, {
+        method: "DELETE",
+      });
+      const result = await res.json();
+      console.log("削除結果:", result);
+
+      // 削除後に再取得 or ステート更新
+      if (viewMode === "month") {
+        const dateStr = currentMonth.toISOString().slice(0, 7);
+        const res = await fetch(`/api/menu/byMonth?userId=${userId}&&date=${dateStr}`);
+        const data = await res.json();
+        setMenuMonth(data);
+      } else {
+        const dateStr = currentWeekly.toISOString().slice(0, 10);
+        const res = await fetch(`/api/menu/byWeekly?userId=${userId}&date=${dateStr}`);
+        const data = await res.json();
+        setMenuWeekly(data);
+      }
+
+      setSelectedDate(null);
+    } catch (error) {
+      console.error("削除エラー:", error);
+      alert("削除に失敗しました");
+    }
+  };
+
+  return (
+    <div className="max-w-md mx-auto p-4">
+      <CalendarHeader
+        currentMonth={viewMode === "month" ? currentMonth : currentWeekly}
+        viewMode={viewMode}
+        onPrev={() => {
+          if (viewMode === "month") setCurrentMonth(subMonths(currentMonth, 1));
+          else setCurrentWeekly((prev) => subDays(prev, 7));
+        }}
+        onNext={() => {
+          if (viewMode === "month") setCurrentMonth(addMonths(currentMonth, 1));
+          else setCurrentWeekly((prev) => addDays(prev, 7));
+        }}
+        onChangeView={setViewMode}
+      />
+
+      {viewMode === "month" ? (
+        <MonthView
+          currentMonth={currentMonth}
+          menuList={menuMonthList}
+          onSelectDate={handleDateClick}
+        />
+      ) : (
+        <WeekView
+          currentWeek={currentWeekly}
+          menuList={menuWeeklyList}
+          mstTimeZone={mstTimeZone}
+          onDelete={(menuId) => handleDelete(Number(menuId))}
+          onEdit={handleEdit}
+          onCreate={handleCreate}
+        />
+      )}
+
+      <AnimatePresence>
+        {selectedDate && viewMode === "month" && (
+          <motion.div
+            key="slide-panel"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.3 }}
+            className="mt-6"
+          >
+            <MenuCard
+              day={format(selectedDate, "yyyy-MM-dd")}
+              menuList={menuMonthList.filter((menu) =>
+                isSameDay(new Date(menu.date), selectedDate)
+              )}
+              mstTimeZone={mstTimeZone}
+              onDelete={(menuId) => handleDelete(menuId)}
+              onEdit={handleEdit}
+              onCreate={handleCreate}
+              isMonthView
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
