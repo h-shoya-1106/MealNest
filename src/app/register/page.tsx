@@ -13,6 +13,7 @@ import SwitchAuthLink from '../components/auth/SwitchAuthLink';
 import AuthFooter from '../components/auth/AuthFooter';
 import AuthDivider from '../components/auth/AuthDivider';
 import TermsCheck from '../components/auth/TermsCheck';
+import { useRouter } from "next/navigation";
 
 export default function SignupScreen() {
   const [formData, setFormData] = useState({
@@ -24,6 +25,7 @@ export default function SignupScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const router = useRouter();
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
     setFormData(prev => ({
@@ -52,16 +54,43 @@ export default function SignupScreen() {
     return null;
   };
 
-  const handleSubmit = async () => {
-    const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-    
-    setIsLoading(true);
-    setError('');
-  };
+    const handleSubmit = async () => {
+        const validationError = validateForm();
+        if (validationError) {
+            setError(validationError);
+            return;
+        }
+
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    password: formData.password
+                })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+            throw new Error(data.message || '登録に失敗しました');
+            }
+
+            // 成功時の処理
+            alert('登録が完了しました');
+
+            router.push('/login');
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
   const handleGoogleSignup = async () => {
     setIsLoading(true);
