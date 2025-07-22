@@ -12,36 +12,37 @@ import GoogleButton from '../components/auth/GoogleButton';
 import SwitchAuthLink from '../components/auth/SwitchAuthLink';
 import AuthFooter from '../components/auth/AuthFooter';
 import AuthDivider from '../components/auth/AuthDivider';
+import { signIn } from "next-auth/react";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
-  const handleSubmit = async () => {
-    if (!email || !password) {
-      setError('メールアドレスとパスワードを入力してください');
-      return;
-    }
-    
-    setIsLoading(true);
-    setError('');
+    const handleSubmit = async () => {
+        if (!email || !password) {
+            setError("メールアドレスとパスワードを入力してください");
+            return;
+        }
 
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      if (email === 'user@example.com' && password === 'password') {
-        alert('ログインに成功しました！');
-      } else {
-        setError('メールアドレスまたはパスワードが間違っています');
-      }
-    } catch (err) {
-      setError('ログインに失敗しました。もう一度お試しください');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        setIsLoading(true);
+        setError("");
+
+        const res = await signIn("credentials", {
+            redirect: false,
+            email,
+            password,
+        });
+
+        if (res?.error) {
+            setError("メールアドレスまたはパスワードが間違っています");
+        } else {
+            window.location.href = "/home";
+        }
+
+        setIsLoading(false);
+    };
 
   const handleGoogleLogin = async () => {
     // TODO ログイン機能実装
