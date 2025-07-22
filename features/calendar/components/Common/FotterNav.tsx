@@ -6,7 +6,7 @@ import { Calendar, Home, ListTodo, User } from "lucide-react";
 import clsx from "clsx";
 
 const navItems = [
-    { label: "Home", icon: Home, href: "/" },
+    { label: "Home", icon: Home, href: "/home" },
     { label: "Calendar", icon: Calendar, href: "/calendar" },
     { label: "ShopList", icon: ListTodo, href: "/shoplist" },
     { label: "Profile", icon: User, href: "/profile" },
