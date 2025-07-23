@@ -1,5 +1,5 @@
 // 月付けに応じてデータを取得したり、新規保存、編集、削除を行う
-import { getMenuByDateForMonth } from "../../../../../lib/func/menu"
+import { getMenuByDateForMonth } from "../../../../services/menu"
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

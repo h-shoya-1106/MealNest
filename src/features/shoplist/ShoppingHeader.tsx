@@ -1,5 +1,5 @@
 import { Calendar, ChevronDown, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
-import { formatDate } from "../../../lib/func/util/formatDate";
+import { formatDate } from "../../lib/util/formatDate";
 
 export const ShoppingHeader = ({
   selectedDates,

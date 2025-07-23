@@ -1,4 +1,4 @@
-import { getMstTimeZone } from "../../../../../lib/func/mst"
+import { getMstTimeZone } from "../../../../services/mst"
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {

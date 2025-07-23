@@ -1,17 +1,17 @@
 "use client"
 
 import React, { useState } from 'react';
-import AuthLayout from "../components/auth/AuthLayout";
-import AuthHeader from "../components/auth/AuthHeader";
-import EmailInput from "../components/auth/EmailInput";
-import PasswordInput from "../components/auth/PasswordInput";
-import AuthErrorMessage from '../components/auth/AuthErrorMessage';
-import RememberAndForgot from '../components/auth/RememberAndForgot';
-import SubmitButton from '../components/auth/SubmitButton';
-import GoogleButton from '../components/auth/GoogleButton';
-import SwitchAuthLink from '../components/auth/SwitchAuthLink';
-import AuthFooter from '../components/auth/AuthFooter';
-import AuthDivider from '../components/auth/AuthDivider';
+import AuthLayout from "../../components/auth/AuthLayout";
+import AuthHeader from "../../components/auth/AuthHeader";
+import EmailInput from "../../components/auth/EmailInput";
+import PasswordInput from "../../components/auth/PasswordInput";
+import AuthErrorMessage from '../../components/auth/AuthErrorMessage';
+import RememberAndForgot from '../../components/auth/RememberAndForgot';
+import SubmitButton from '../../components/auth/SubmitButton';
+import GoogleButton from '../../components/auth/GoogleButton';
+import SwitchAuthLink from '../../components/auth/SwitchAuthLink';
+import AuthFooter from '../../components/auth/AuthFooter';
+import AuthDivider from '../../components/auth/AuthDivider';
 import { signIn } from "next-auth/react";
 import { PATHS } from '@/constants/paths';
 

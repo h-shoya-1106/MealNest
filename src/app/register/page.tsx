@@ -1,18 +1,18 @@
 "use client"
 
 import React, { useState } from 'react';
-import AuthLayout from "../components/auth/AuthLayout";
-import AuthHeader from "../components/auth/AuthHeader";
-import NameInput from '../components/auth/NameInput';
-import EmailInput from "../components/auth/EmailInput";
-import PasswordInput from "../components/auth/PasswordInput";
-import AuthErrorMessage from '../components/auth/AuthErrorMessage';
-import SubmitButton from '../components/auth/SubmitButton';
-import GoogleButton from '../components/auth/GoogleButton';
-import SwitchAuthLink from '../components/auth/SwitchAuthLink';
-import AuthFooter from '../components/auth/AuthFooter';
-import AuthDivider from '../components/auth/AuthDivider';
-import TermsCheck from '../components/auth/TermsCheck';
+import AuthLayout from "../../components/auth/AuthLayout";
+import AuthHeader from "../../components/auth/AuthHeader";
+import NameInput from '../../components/auth/NameInput';
+import EmailInput from "../../components/auth/EmailInput";
+import PasswordInput from "../../components/auth/PasswordInput";
+import AuthErrorMessage from '../../components/auth/AuthErrorMessage';
+import SubmitButton from '../../components/auth/SubmitButton';
+import GoogleButton from '../../components/auth/GoogleButton';
+import SwitchAuthLink from '../../components/auth/SwitchAuthLink';
+import AuthFooter from '../../components/auth/AuthFooter';
+import AuthDivider from '../../components/auth/AuthDivider';
+import TermsCheck from '../../components/auth/TermsCheck';
 import { useRouter } from "next/navigation";
 import { API } from '@/constants/api';
 import { PATHS } from '@/constants/paths';

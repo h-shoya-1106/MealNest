@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ShoppingHeader } from "../../ShopList/Header/ShoppingHeader";
-import { ProgressBar } from "../../ShopList/Header/ProgressBar";
-import { MenuAccordion } from "../../ShopList/MenuAccordion/MenuAccordion";
-import { ShoppingList } from "../../ShopList/ShopList";
+import { ShoppingHeader } from "./ShoppingHeader";
+import { ProgressBar } from "./ProgressBar";
+import { MenuAccordion } from "./MenuAccordion";
+import { ShoppingList } from "./ShopList";
 import { Session } from "next-auth";
 import { API } from "@/constants/api";
 

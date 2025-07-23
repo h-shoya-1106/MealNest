@@ -2,8 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
-import FooterNav from "../../../features/calendar/components/Common/FotterNav";
-import Header from "../../../features/calendar/components/Common/Header";
+import FooterNav from "./FotterNav";
+import Header from "./Header";
 import { PATHS } from "@/constants/paths";
 
 

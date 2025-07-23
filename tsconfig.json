@@ -32,7 +32,7 @@
     "prisma",
     "src",
     ".next/types/**/*.ts"
-, "features/calendar/components/Header/CalendarHeader.tsx", "features/calendar/components/Month/MonthView.tsx", "features/calendar/components/Week/WeekView.tsx", "features/calendar/components/Day/DayCell.tsx", "features/calendar/components/Week/weeklyCard.tsx", "features/calendar/components/ShopListClient.tsx"  ],
+, "src/features/calendar/CalendarHeader.tsx", "src/features/calendar/MonthView.tsx", "src/features/calendar/WeekView.tsx", "features/calendar/components/Day/DayCell.tsx", "src/features/calendar/weeklyCard.tsx", "src/features/shoplist/ShopListClient.tsx"  ],
   "exclude": [
     "node_modules"
   ]

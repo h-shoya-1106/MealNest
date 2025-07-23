@@ -1,4 +1,4 @@
-import MenuForm from "../../../../../../features/calendar/components/Common/MenuForm";
+import MenuForm from "../../../../../features/calendar/MenuForm";
 
 type PageProps = {
   params: Promise<{ date: string }>;
