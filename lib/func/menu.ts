@@ -3,7 +3,7 @@ import { startOfDay, endOfDay } from "date-fns";
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 
 // 日付をもとにmenuを取得
-export async function getMenuByDate(userId: number, date: Date) {
+export async function getMenuByDate(userId: number, date: string) {
     return await prisma.menu.findMany({
         where: {
             userId,
@@ -81,15 +81,7 @@ export async function getMenuByDateForMonth(userId: number, date: Date) {
     },
     include: {
       timeZone: true,
-      menuDishes: {
-        include: {
-          dish: {
-            include: {
-              dishStatus: true,
-            },
-          },
-        },
-      },
+      menuDishes: true,
     },
   });
 }

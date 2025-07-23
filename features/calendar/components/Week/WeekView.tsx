@@ -7,7 +7,7 @@ type Props = {
   currentWeek: Date;
   menuList: Menu[];
   mstTimeZone: MstTimeZone[];
-  onDelete: (day: string) => void;
+  onDelete: (menuId: number) => void;
   onEdit: (day: string) => void;
   onCreate: (day: string) => void;
 };

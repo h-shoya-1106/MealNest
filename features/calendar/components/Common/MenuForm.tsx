@@ -33,9 +33,9 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
   const [dishes, setDishes] = useState<Dish[]>([
     { name: "", dishStatusId: "", materials: [{ materialName: "", quantityId: "", amount: "" }] },
   ]);
-  const [timeZones, setTimeZones] = useState([]);
-  const [dishStatuses, setDishStatuses] = useState([]);
-  const [quantities, setQuantities] = useState([]);
+  const [timeZones, setTimeZones] = useState<{ id: number; displayName: string }[]>([]);
+  const [dishStatuses, setDishStatuses] = useState<{ id: number; displayName: string }[]>([]);
+  const [quantities, setQuantities] = useState<{ id: number; displayName: string }[]>([]);
 
   useEffect(() => {
     if (isEdit && initialData) {
@@ -70,7 +70,9 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
     fetchMasters();
   }, []);
 
-  const handleDishChange = (index: number, field: keyof Dish, value: string) => {
+  type DishStringKeys = Extract<keyof Dish, "name" | "dishStatusId">;
+
+  const handleDishChange = (index: number, field: DishStringKeys, value: string) => {
     const updated = [...dishes];
     updated[index][field] = value;
     setDishes(updated);

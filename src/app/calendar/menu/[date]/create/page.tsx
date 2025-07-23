@@ -1,5 +1,12 @@
 import MenuForm from "../../../../../../features/calendar/components/Common/MenuForm";
 
-export default function MenuCreatePage({ params }: { params: { date: string } }) {
-  return <MenuForm date={params.date} />;
+type PageProps = {
+  params: Promise<{ date: string }>;
+};
+
+export default async function MenuCreatePage({ params }: PageProps) {
+  const resolvedParams = await params;
+  const date = resolvedParams.date;
+
+  return <MenuForm date={date} />;
 }
