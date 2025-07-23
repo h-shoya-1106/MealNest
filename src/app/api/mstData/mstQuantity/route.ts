@@ -1,4 +1,4 @@
-import { getMstQuantity } from "../../../../../lib/func/mst"
+import { getMstQuantity } from "../../../../services/mst"
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {

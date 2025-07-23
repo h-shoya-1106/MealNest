@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { requireLogin } from "@/lib/requireLogin";
-import MenuForm from "../../../../../../features/calendar/components/Common/MenuForm";
+import MenuForm from "../../../../../features/calendar/MenuForm";
 import { API } from "@/constants/api";
 
 export default async function MenuEditPage() {

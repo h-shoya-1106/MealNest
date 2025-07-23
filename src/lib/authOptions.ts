@@ -1,7 +1,8 @@
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { prisma } from "../lib/prisma";
 import bcrypt from "bcryptjs";
+import { prisma } from "./prisma";
+import { PATHS } from "@/constants/paths";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -25,7 +26,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/login",
+    signIn: PATHS.LOGIN,
   },
   session: {
     strategy: "jwt",

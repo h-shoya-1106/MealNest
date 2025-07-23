@@ -1,6 +1,6 @@
 import { startOfWeek, addDays, format } from "date-fns";
 import { Menu } from "../../types";
-import { MenuCard } from "../Common/MenuCard";
+import { MenuCard } from "./MenuCard";
 import { MstTimeZone } from "@prisma/client";
 
 type Props = {

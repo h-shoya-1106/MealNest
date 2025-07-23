@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { addDays, addMonths, subDays, subMonths } from "date-fns";
-import { CalendarHeader } from "../../../features/calendar/components/Header/CalendarHeader";
-import { MonthView } from "../../../features/calendar/components/Month/MonthView";
-import { WeekView } from "../../../features/calendar/components/Week/WeekView";
+import { CalendarHeader } from "./CalendarHeader";
+import { MonthView } from "./MonthView";
+import { WeekView } from "./WeekView";
 import { MstTimeZone } from "@prisma/client";
-import { MenuWithRelations as Menu } from "../types";
+import { MenuWithRelations as Menu } from "../../types";
 import { isSameDay, format } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
-import { MenuCard } from "../../../features/calendar/components/Common/MenuCard";
+import { MenuCard } from "./MenuCard";
 import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
 import { API } from "@/constants/api";

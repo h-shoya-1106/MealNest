@@ -1,6 +1,6 @@
 // 週に応じてデータを取得したり、新規保存、編集、削除を行う
 import { parseISO, isValid } from "date-fns";
-import { getMenuByDateForWeek } from "../../../../../lib/func/menu";
+import { getMenuByDateForWeek } from "../../../../services/menu";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
