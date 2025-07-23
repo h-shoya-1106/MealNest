@@ -14,6 +14,8 @@ import AuthFooter from '../components/auth/AuthFooter';
 import AuthDivider from '../components/auth/AuthDivider';
 import TermsCheck from '../components/auth/TermsCheck';
 import { useRouter } from "next/navigation";
+import { API } from '@/constants/api';
+import { PATHS } from '@/constants/paths';
 
 export default function SignupScreen() {
   const [formData, setFormData] = useState({
@@ -65,7 +67,7 @@ export default function SignupScreen() {
         setError('');
 
         try {
-            const res = await fetch('/api/auth/register', {
+            const res = await fetch(API.REGISTER, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -84,7 +86,7 @@ export default function SignupScreen() {
             // 成功時の処理
             alert('登録が完了しました');
 
-            router.push('/login');
+            router.push(PATHS.LOGIN);
         } catch (err: any) {
             setError(err.message);
         } finally {

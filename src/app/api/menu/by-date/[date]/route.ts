@@ -3,9 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  context: { params: Promise<{ date: string }> }
+  context: { params: Promise<{ userId: number, date: string }> }
 ) {
-  const { date } = await context.params;
+  const { userId, date } = await context.params;
+  
 
   if (!date) {
     return NextResponse.json({ error: "日付が指定されていません" }, { status: 400 });
@@ -19,6 +20,7 @@ export async function GET(
 
     const menu = await prisma.menu.findFirst({
       where: {
+        userId,
         date: parsedDate,
         deletedAt: null,
       },
