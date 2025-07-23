@@ -26,9 +26,7 @@ export default function CalendarPage({ session }: Props) {
   const [currentWeekly, setCurrentWeekly] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const router = useRouter();
-//   const userId = session.user.id;
-  const userId = 1;
-
+  const userId = session.user.id;
 
   useEffect(() => {
     const fetchMenu = async () => {
