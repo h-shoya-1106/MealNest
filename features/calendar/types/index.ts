@@ -12,6 +12,17 @@ export type Menu = {
   menuDishes: any[];
 };
 
+export type MenuWithRelations = {
+  id: number;
+  name: string;
+  date: string;
+  timeZone: {
+    id: number;
+    displayName: string;
+  };
+  menuDishes: any[];
+};
+
 declare module "next-auth" {
   interface Session {
     user: {
