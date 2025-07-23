@@ -2,15 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { requireLogin } from "@/lib/requireLogin";
 import MenuForm from "../../../../../../features/calendar/components/Common/MenuForm";
-import { Session } from "next-auth";
 import { API } from "@/constants/api";
 
-type Props = {
-  session: Session;
-};
-
-export default function MenuEditPage({ session }: Props) {
+export default async function MenuEditPage() {
+    const session = await requireLogin(); // サーバーでセッションチェック
     const { date: rawDate } = useParams();
     const date = Array.isArray(rawDate) ? rawDate[0] : rawDate ?? "";
     const [initialData, setInitialData] = useState(null);
