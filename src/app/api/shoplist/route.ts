@@ -2,16 +2,18 @@ import { prisma } from "../../../../lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { startOfDay, endOfDay } from "date-fns";
 
-// 仮ユーザーID
-const USER_ID = 1;
-
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const datesParam = searchParams.get("dates");
+  const userIdParam = searchParams.get("userId");
+  const userId = userIdParam ? Number(userIdParam) : undefined;
 
   if (!datesParam) {
     return NextResponse.json({ error: "dates query is required" }, { status: 400 });
   }
+  if (!userId) {
+  return NextResponse.json({ error: "userId query is required" }, { status: 400 });
+}
 
   const dateStrings = datesParam.split(",");
   const dateRanges = dateStrings.map((ds) => ({
@@ -23,7 +25,7 @@ export async function GET(req: NextRequest) {
     // 複数日付に対応する where 条件を OR で構築
     const menus = await prisma.menu.findMany({
       where: {
-        userId: USER_ID,
+        userId,
         OR: dateRanges.map((range) => ({ date: range })),
       },
       include: {
@@ -84,7 +86,6 @@ export async function GET(req: NextRequest) {
 
     const materials = Array.from(materialMap.values());
 
-    console.log(materials)
     return NextResponse.json({ menuData, materials });
   } catch (error) {
     console.error("[shoplist] fetch error:", error);

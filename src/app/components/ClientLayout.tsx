@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import FooterNav from "../../../features/calendar/components/Common/FotterNav";
 import Header from "../../../features/calendar/components/Common/Header";
+import { PATHS } from "@/constants/paths";
 
 
 export default function ClientLayout({
@@ -12,7 +13,7 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const hidePaths = ["/login", "/register"];
+  const hidePaths = [PATHS.LOGIN, PATHS.REGISTER];
   const shouldShow = !hidePaths.includes(pathname);
 
   return (

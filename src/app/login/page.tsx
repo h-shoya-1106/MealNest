@@ -13,6 +13,7 @@ import SwitchAuthLink from '../components/auth/SwitchAuthLink';
 import AuthFooter from '../components/auth/AuthFooter';
 import AuthDivider from '../components/auth/AuthDivider';
 import { signIn } from "next-auth/react";
+import { PATHS } from '@/constants/paths';
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
@@ -38,7 +39,7 @@ export default function LoginScreen() {
         if (res?.error) {
             setError("メールアドレスまたはパスワードが間違っています");
         } else {
-            window.location.href = "/home";
+            window.location.href = PATHS.HOME;
         }
 
         setIsLoading(false);

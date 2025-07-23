@@ -7,7 +7,6 @@ type Props = {
   currentMonth: Date;
   menuList: Menu[];
   onSelectDate: (date: Date) => void;
-  // mstTimeZone: { id: number, displayName: string }[];
 };
 
 export const MonthView = ({ currentMonth, menuList, onSelectDate }: Props) => {

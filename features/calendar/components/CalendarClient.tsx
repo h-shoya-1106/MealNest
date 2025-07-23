@@ -12,6 +12,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MenuCard } from "../../../features/calendar/components/Common/MenuCard";
 import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
+import { API } from "@/constants/api";
+import { PATHS } from "@/constants/paths";
 
 type Props = {
   session: Session;
@@ -26,12 +28,12 @@ export default function CalendarPage({ session }: Props) {
   const [currentWeekly, setCurrentWeekly] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const router = useRouter();
-  const userId = session.user.id;
+  const userId = Number(session.user.id);
 
   useEffect(() => {
     const fetchMenu = async () => {
       const dateStr = currentMonth.toISOString().slice(0, 7);
-      const res = await fetch(`/api/menu/byMonth?userId=${userId}&&date=${dateStr}`);
+      const res = await fetch(API.MENU.GET_BY_USER_ID('byMonth', userId, dateStr));
       const data = await res.json() as Menu[];
       setMenuMonth(data);
     };
@@ -41,7 +43,7 @@ export default function CalendarPage({ session }: Props) {
   useEffect(() => {
     const fetchMenu = async () => {
       const dateStr = currentWeekly.toISOString().slice(0, 10);
-      const res = await fetch(`/api/menu/byWeekly?userId=${userId}&date=${dateStr}`);
+      const res = await fetch(API.MENU.GET_BY_USER_ID('byWeekly', userId, dateStr));
       const data = await res.json();
       setMenuWeekly(data);
     };
@@ -50,7 +52,7 @@ export default function CalendarPage({ session }: Props) {
 
   useEffect(() => {
     const fetchMstTimeZone = async () => {
-      const res = await fetch('/api/mstData/mstTimeZone');
+      const res = await fetch(API.MST_TIME_ZONE);
       const data = await res.json();
       setMstTimeZone(data);
     };
@@ -69,18 +71,18 @@ export default function CalendarPage({ session }: Props) {
   };
 
   const handleCreate = (day: string) => {
-    router.push(`/calendar/menu/${day}/create`);
+    router.push(PATHS.MENU.CREATE(day));
   };
 
   const handleEdit = (day: string) => {
-    router.push(`/calendar/menu/${day}/edit`);
+    router.push(PATHS.MENU.UPDATE(day));
   };
 
   const handleDelete = async (menuId: number) => {
     if (!confirm("この献立を削除しますか？")) return;
 
     try {
-      const res = await fetch(`/api/menu/by-id/${menuId}/delete`, {
+      const res = await fetch(API.MENU.DELETE(menuId), {
         method: "DELETE",
       });
       const result = await res.json();

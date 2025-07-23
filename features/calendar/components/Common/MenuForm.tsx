@@ -6,6 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus, ChefHat, Utensils } from "lucide-react";
 import toast from "react-hot-toast";
+import { API } from '@/constants/api';
+import { PATHS } from "@/constants/paths";
+import { id } from "date-fns/locale";
 
 type Material = {
   materialName: string;
@@ -59,9 +62,9 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
   useEffect(() => {
     const fetchMasters = async () => {
       const [tzRes, dsRes, qRes] = await Promise.all([
-        fetch("/api/mstData/mstTimeZone"),
-        fetch("/api/mstData/mstDishStatus"),
-        fetch("/api/mstData/mstQuantity"),
+        fetch(API.MST_TIME_ZONE),
+        fetch(API.MST_DISH_STATUS),
+        fetch(API.MST_QUANTITY),
       ]);
       setTimeZones(await tzRes.json());
       setDishStatuses(await dsRes.json());
@@ -129,7 +132,7 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
     };
 
     const method = isEdit ? "PUT" : "POST";
-    const url = isEdit ? `/api/menu/by-id/${initialData?.id}/update` : "/api/menu/create";
+    const url = isEdit ? API.MENU.UPDATE(initialData.id) : API.MENU.CREATE;
 
     try {
       const res = await fetch(url, {
@@ -152,7 +155,7 @@ export default function MenuForm({ date, isEdit = false, initialData }: MenuForm
   };
 
   const handleCancel = () => {
-    router.push("/calendar");
+    router.push(PATHS.CALENDAR);
   };
 
   const getDishStatusIcon = (statusId: string) => {
