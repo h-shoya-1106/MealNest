@@ -46,7 +46,7 @@ export default function LoginScreen() {
     };
 
   const handleGoogleLogin = async () => {
-    // TODO ログイン機能実装
+    await signIn("google", { callback: PATHS.LOGIN });
   };
 
   return (
