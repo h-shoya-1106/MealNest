@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
+import { requireLogin } from "@/lib/requireLogin";
 
 export async function POST(req: NextRequest) {
+    const session = await requireLogin();
     const body = await req.json();
+
+    if (!session || !session.user?.id) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = Number(session.user.id);
 
     const {
         date,
@@ -29,7 +37,7 @@ export async function POST(req: NextRequest) {
     try {
         const menu = await prisma.menu.create({
             data: {
-                userId: 1,
+                userId,
                 name: menuName,
                 date: new Date(date),
                 timeZoneId,
