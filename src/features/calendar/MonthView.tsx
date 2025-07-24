@@ -1,6 +1,6 @@
 import { eachDayOfInterval, endOfMonth, getDay, isSameDay, startOfMonth } from "date-fns";
-import { DayCell } from "../Day/DayCell";
 import { Menu } from "../../types";
+import { DayCell } from "./DayCell";
 
 
 type Props = {
