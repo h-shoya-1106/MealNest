@@ -1,15 +1,14 @@
-import { prisma } from "../../../../../lib/prisma";
+import { prisma } from "../../../../lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  context: { params: Promise<{ userId: number, date: string }> }
-) {
-  const { userId, date } = await context.params;
-  
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
 
-  if (!date) {
-    return NextResponse.json({ error: "日付が指定されていません" }, { status: 400 });
+  const userId = Number(searchParams.get("userId"));
+  const date = searchParams.get("date");
+
+  if (!userId || !date) {
+    return NextResponse.json({ error: "userIdまたはdateが指定されていません" }, { status: 400 });
   }
 
   try {
@@ -54,3 +53,4 @@ export async function GET(
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
+
