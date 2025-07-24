@@ -29,7 +29,6 @@ export default function CalendarPage({ session }: Props) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const router = useRouter();
   const userId = Number(session.user.id);
-  console.log(session)
 
   useEffect(() => {
     const fetchMenu = async () => {

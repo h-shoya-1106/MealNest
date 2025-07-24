@@ -8,7 +8,6 @@ import { Trash2, Plus, ChefHat, Utensils } from "lucide-react";
 import toast from "react-hot-toast";
 import { API } from '@/constants/api';
 import { PATHS } from "@/constants/paths";
-import { id } from "date-fns/locale";
 
 type Material = {
   materialName: string;
