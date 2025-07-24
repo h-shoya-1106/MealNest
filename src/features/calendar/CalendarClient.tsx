@@ -29,12 +29,13 @@ export default function CalendarPage({ session }: Props) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const router = useRouter();
   const userId = Number(session.user.id);
+  console.log(session)
 
   useEffect(() => {
     const fetchMenu = async () => {
       const dateStr = currentMonth.toISOString().slice(0, 7);
       const res = await fetch(API.MENU.GET_BY_USER_ID('byMonth', userId, dateStr));
-      const data = await res.json() as Menu[];
+      const data = (await res.json()) ?? [] as Menu[];
       setMenuMonth(data);
     };
     fetchMenu();

@@ -36,7 +36,7 @@ export const authOptions: AuthOptions = {
     signIn: PATHS.LOGIN,
   },
   session: {
-    strategy: "database",
+    strategy: "jwt",
   },
   callbacks: {
     async jwt({ token, user }) {
