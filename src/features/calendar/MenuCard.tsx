@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 import { Menu } from "../../types";
 import { MstTimeZone } from "@prisma/client";
 import { useState } from "react";
-import { MenuDetail } from "./MenuDetail";
+import MenuDetail from "./MenuDetail";
+import * as Dialog from "@radix-ui/react-dialog";
 
 export type MenuCardProps = {
     day: string;
@@ -28,7 +29,6 @@ export const MenuCard = ({
     isMonthView = false,
 }: MenuCardProps) => {
     const [selectedMeal, setSelectedMeal] = useState<Menu | null>(null);
-
     const title = isMonthView
         ? format(new Date(day), "yyyy/MM/dd")
         : format(new Date(day), "EEEE");
@@ -93,11 +93,15 @@ export const MenuCard = ({
                 <div className="text-gray-500">献立が登録されていません</div>
             )}
 
+
             {selectedMeal && (
-                <MenuDetail
-                meal={selectedMeal}
-                onClose={() => setSelectedMeal(null)}
-                />
+                <Dialog.Root open={!!selectedMeal} onOpenChange={(open) => !open && setSelectedMeal(null)}>
+                    <Dialog.Portal>
+                        <div className="fixed inset-0 bg-black/50">
+                            <MenuDetail menu={selectedMeal} day={day} date={title} onClose={() => setSelectedMeal(null)} onEdit={onEdit} />
+                        </div>
+                    </Dialog.Portal>
+                </Dialog.Root>
             )}
         </div>
     );

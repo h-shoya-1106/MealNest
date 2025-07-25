@@ -52,13 +52,13 @@ export async function getMenuByDateForWeek(userId: number, date: Date) {
     include: {
         timeZone: true,
         menuDishes: {
-        include: {
-          dish: {
-            include: {
-                dishStatus: true,
+          include: {
+            dish: {
+              include: {
+                  dishStatus: true,
+              },
             },
           },
-        },
         },
     },
     orderBy: {
@@ -81,7 +81,20 @@ export async function getMenuByDateForMonth(userId: number, date: Date) {
     },
     include: {
       timeZone: true,
-      menuDishes: true,
+      menuDishes: {
+        include: {
+          dish: {
+            include: {
+              dishMaterials: {
+                include: {
+                  material: true,
+                  quantity: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 }
