@@ -35,7 +35,6 @@ export default function MenuFormClient({ userId }: Props) {
       fetchMenu();
     }
   }, [date, userId]);
-  console.log(initialData)
 
   if (error) return <p className="text-red-500">エラー: {error}</p>;
   if (!initialData) return <p>読み込み中...</p>;

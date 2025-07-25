@@ -7,7 +7,6 @@ export const API = {
         UPDATE: (menuId: string) => `/api/menu/by-id/${menuId}/update`,
         DELETE: (menuId: number) => `/api/menu/by-id/${menuId}/delete`,
         GET_BY_USER_ID: (period: string, userId: number, dateStr: string) => `/api/menu/${period}?userId=${userId}&&date=${dateStr}`,
-
     },
     SHOP_LIST: {
         GET_BY_USER_ID: (userId: number, dateList: string) => `/api/shoplist?userId=${userId}&&dates=${dateList}`,
