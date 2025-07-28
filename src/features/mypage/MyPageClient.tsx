@@ -10,7 +10,11 @@ import HelpPage from "../../app/mypage/help/page";
 
 const tabs = ["プロフィール", "統計情報", "設定", "ヘルプ"];
 
-export default function MyPageClient() {
+type Props = {
+    userId: Number;
+}
+
+export default function MyPageClient({ userId }: Props) {
   const [activeTab, setActiveTab] = useState("統計情報");
 
   return (

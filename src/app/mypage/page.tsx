@@ -3,5 +3,6 @@ import MyPageClient from "../../features/mypage/MyPageClient";
 
 export default async function MyPagePage() {
   const session = await requireLogin();
-  return <MyPageClient />;
+  const userId = Number(session.user.id);
+  return <MyPageClient userId={userId}/>;
 }
