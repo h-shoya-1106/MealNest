@@ -10,7 +10,7 @@ const navItems = [
     { label: "Home", icon: Home, href: PATHS.HOME },
     { label: "Calendar", icon: Calendar, href: PATHS.CALENDAR },
     { label: "ShopList", icon: ListTodo, href: PATHS.SHOP_LIST },
-    { label: "Profile", icon: User, href: PATHS.PROFILE },
+    { label: "MyPage", icon: User, href: PATHS.MYPAGE },
 ];
 
 export default function FooterNav() {
