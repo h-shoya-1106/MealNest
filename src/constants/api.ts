@@ -11,6 +11,10 @@ export const API = {
     SHOP_LIST: {
         GET_BY_USER_ID: (userId: number, dateList: string) => `/api/shoplist?userId=${userId}&&dates=${dateList}`,
     },
+    FAVORITE: {
+        CHECK: '/api/favorite/check',
+        TOGGLE: '/api/favorite/toggle',
+    },
     MST_TIME_ZONE: '/api/mstData/mstTimeZone',
     MST_DISH_STATUS: '/api/mstData/mstDishStatus',
     MST_QUANTITY: '/api/mstData/mstQuantity',
