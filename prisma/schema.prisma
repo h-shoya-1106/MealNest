@@ -26,6 +26,7 @@ model User {
 
   menus      Menu[]
   accounts   Account[]
+  favorites   Favorite[]
 }
 
 model Account {
@@ -74,6 +75,18 @@ model Dish {
 
   menuDishes     MenuDish[]
   dishMaterials  DishMaterial[]
+  favorites   Favorite[]
+}
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @map("user_id")
+  dish      Dish     @relation(fields: [dishId], references: [id])
+  dishId    Int      @map("dish_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, dishId]) // ユーザーごとに1料理1お気に入りまで
 }
 
 model MstMaterial {

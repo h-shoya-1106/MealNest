@@ -1,7 +1,10 @@
 "use client";
 
+import { API } from "@/constants/api";
 import * as Dialog from "@radix-ui/react-dialog";
-import { ChefHat, Pencil, X } from "lucide-react";
+import { ChefHat, Pencil, X, Heart } from "lucide-react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 type MenuWithRelations = {
   id: number;
@@ -10,6 +13,7 @@ type MenuWithRelations = {
   menuDishes: {
     id: number;
     dish: {
+      id: number;
       name: string;
       dishMaterials: {
         material: { displayName: string };
@@ -18,6 +22,10 @@ type MenuWithRelations = {
       }[];
     };
   }[];
+};
+
+type FavoriteState = {
+  [dishId: number]: boolean;
 };
 
 type Props = {
@@ -29,6 +37,43 @@ type Props = {
 };
 
 export default function MenuDetail({ menu, day, date, onClose, onEdit }: Props) {
+  const [favoriteState, setFavoriteState] = useState<FavoriteState>({});
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      const results = await Promise.all(
+        menu.menuDishes.map(async (menuDish) => {
+          const res = await axios.post(API.FAVORITE.CHECK, {
+            dishId: menuDish.dish.id,
+          });
+          return { dishId: menuDish.dish.id, isFavorite: res.data.isFavorite };
+        })
+      );
+
+      const newState: FavoriteState = {};
+      results.forEach(({ dishId, isFavorite }) => {
+        newState[dishId] = isFavorite;
+      });
+
+      setFavoriteState(newState);
+    };
+
+    fetchFavorites();
+  }, [menu]);
+
+  const toggleFavorite = async (dishId: number) => {
+    try {
+      const res = await axios.post(API.FAVORITE.TOGGLE, { dishId });
+
+      setFavoriteState((prevState) => ({
+        ...prevState,
+        [dishId]: res.data.status === "added",
+      }));
+    } catch (err) {
+      console.error("お気に入り登録/解除失敗:", err);
+    }
+  };
+
   return (
     <Dialog.Root open={true} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Portal>
@@ -69,6 +114,12 @@ export default function MenuDetail({ menu, day, date, onClose, onEdit }: Props) 
                       {i + 1}
                     </span>
                     <span className="font-semibold">{menuDish.dish.name}</span>
+                    <button onClick={() => toggleFavorite(menuDish.dish.id)}>
+                      <Heart
+                        className={favoriteState[menuDish.dish.id] ? "text-red-500" : "text-gray-300"}
+                        fill={favoriteState[menuDish.dish.id] ? "currentColor" : "none"}
+                      />
+                    </button>
                   </div>
                   <div className="text-xs font-medium text-gray-600">材料・分量</div>
                     {menuDish.dish.dishMaterials.map((material, i) => (
