@@ -3,18 +3,40 @@
 import { useState } from "react";
 import { User } from "@prisma/client";
 import { User as UserIcon, Camera } from "lucide-react";
+import { API } from "@/constants/api";
 
 type Props = {
   user: User;
 };
 
 export default function ProfileClient({ user }: Props) {
-  const [name, setName] = useState(user.name ?? "");
-  const [email] = useState(user.email ?? "");
+    const [name, setName] = useState(user.name ?? "");
+    const [email, setEmail] = useState(user.email ?? "");
 
-  const handleSave = () => {
-    alert("保存しました（仮実装）");
-  };
+    const handleSave = async () => {
+        try {
+            const res = await fetch(API.PROFILE.UPDATE, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    name,
+                    email,
+                }),
+            });
+
+            if (!res.ok) {
+                throw new Error("更新に失敗しました");
+            }
+
+            alert("プロフィールを更新しました");
+        } catch (err) {
+            alert("エラーが発生しました");
+            console.error(err);
+        }
+    };
 
     return (
         <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow text-center">
@@ -62,7 +84,7 @@ export default function ProfileClient({ user }: Props) {
                         type="email"
                         className="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
                         value={email}
-                        disabled
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
 

@@ -15,6 +15,9 @@ export const API = {
         CHECK: '/api/favorite/check',
         TOGGLE: '/api/favorite/toggle',
     },
+    PROFILE: {
+        UPDATE: '/api/profile/update'
+    },
     MST_TIME_ZONE: '/api/mstData/mstTimeZone',
     MST_DISH_STATUS: '/api/mstData/mstDishStatus',
     MST_QUANTITY: '/api/mstData/mstQuantity',
