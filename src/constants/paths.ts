@@ -4,7 +4,7 @@ export const PATHS = {
     HOME: '/home',
     CALENDAR: '/calendar',
     SHOP_LIST: '/shoplist',
-    MYPAGE: '/mypage',
+    MYPAGE: '/mypage/profile',
     MENU: {
         CREATE:(date:string) => `/calendar/menu/${date}/create`,
         UPDATE: (date: string) => `/calendar/menu/${date}/edit`,

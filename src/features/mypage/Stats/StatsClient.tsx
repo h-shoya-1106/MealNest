@@ -1,47 +1,32 @@
 "use client";
 
-import { ListOrdered, Heart, Calendar, Tag, Flame } from "lucide-react";
+import { ListOrdered, Heart, Calendar, Tag } from "lucide-react";
+import { StatCard } from "./components/StatCard";
+import { DishRankingCard } from "./components/DishRankingCard";
 
-const repeatDishes = [];
+type Props = {
+  menuCount: number;
+  favorite: number;
+  continuousDays: number;
+  materialCount: number;
+  dishRankingList: Array<{ id: number; name: string; count: number }>;
+};
 
-const StatCard = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) => (
-  <div className="bg-white rounded-xl shadow p-4 flex flex-col items-start gap-2 border border-gray-100">
-    <div className="text-gray-500">{icon}</div>
-    <div className="text-sm text-gray-600">{label}</div>
-    <div className="text-xl font-semibold text-gray-800">{value}</div>
-  </div>
-);
-
-export default function StatsClient() {
+export default function StatsClient({ menuCount, favorite, continuousDays, materialCount, dishRankingList }: Props) {
   return (
     <>
-      {/* 統計カード */}
+    {/* TODO StatCard押下すると専用画面を表示する */}
       <section className="grid grid-cols-2 gap-4 mb-6">
-        <StatCard icon={<ListOrdered size={20} />} label="献立数" value="245" />
-        <StatCard icon={<Heart size={20} />} label="お気に入り" value="12" />
-        <StatCard icon={<Calendar size={20} />} label="献立継続日数" value="8" />
-        <StatCard icon={<Tag size={20} />} label="食材の種類" value="25" />
+        <StatCard icon={<ListOrdered size={20} />} label="献立数" value={menuCount.toLocaleString()} />
+        <StatCard icon={<Heart size={20} />} label="お気に入り" value={favorite.toLocaleString()} />
+        <StatCard icon={<Calendar size={20} />} label="献立継続日数" value={continuousDays.toLocaleString()} />
+        <StatCard icon={<Tag size={20} />} label="食材の種類" value={materialCount.toLocaleString()} />
       </section>
 
-      {/* リピート率の高い料理 */}
       <section className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-3">
         <h2 className="text-sm font-semibold text-gray-700 mb-2">リピート率の高い料理</h2>
-        {repeatDishes.map((dish, i) => (
-          <div
-            key={dish.name}
-            className="flex items-center justify-between bg-white rounded-lg px-3 py-2 shadow-sm border border-gray-100"
-          >
-            <div className="flex items-center gap-3">
-              <Flame className="w-4 h-4 text-orange-500" />
-              <span className="text-sm font-medium text-gray-800">{dish.name}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500">{dish.count}回</span>
-              <span className="text-xs bg-blue-100 text-blue-600 rounded-full px-2 py-0.5 font-semibold">
-                {i + 1}位
-              </span>
-            </div>
-          </div>
+        {dishRankingList.map((dish, i) => (
+          <DishRankingCard key={dish.id} name={dish.name} count={dish.count} rank={i + 1} />
         ))}
       </section>
     </>
