@@ -1,20 +1,84 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { User } from "@prisma/client";
 import { User as UserIcon, Camera } from "lucide-react";
+import { API } from "@/constants/api";
 
 type Props = {
   user: User;
 };
 
 export default function ProfileClient({ user }: Props) {
-  const [name, setName] = useState(user.name ?? "");
-  const [email] = useState(user.email ?? "");
+    const [name, setName] = useState(user.name ?? "");
+    const [email, setEmail] = useState(user.email ?? "");
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSave = () => {
-    alert("保存しました（仮実装）");
-  };
+    const handleImageClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        // Cloudinaryに画像をアップロード
+        const cloudRes = await fetch(API.CLOUDINARY, {
+            method: "POST",
+            body: formData,
+        });
+        if (!cloudRes.ok) {
+            alert("Cloudinaryへのアップロードに失敗しました");
+            return;
+        }
+        const cloudData = await cloudRes.json();
+        const imageUrl = cloudData.secure_url;
+
+        // DBに imageUrl を保存
+        const res = await fetch(API.PROFILE.IMAGE.UPLOAD, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+            userId: user.id,
+            image: imageUrl,
+            }),
+        });
+        if (!res.ok) {
+            alert("プロフィール画像の保存に失敗しました");
+            return;
+        }
+
+        user.image = imageUrl;
+    };
+
+
+    const handleSave = async () => {
+        try {
+            const res = await fetch(API.PROFILE.UPDATE, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    name,
+                    email,
+                }),
+            });
+
+            if (!res.ok) {
+                throw new Error("更新に失敗しました");
+            }
+
+            alert("プロフィールを更新しました");
+        } catch (err) {
+            alert("エラーが発生しました");
+            console.error(err);
+        }
+    };
 
     return (
         <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow text-center">
@@ -27,13 +91,24 @@ export default function ProfileClient({ user }: Props) {
                     className="w-full h-full object-cover rounded-full"
                     />
                 ) : (
-                    <UserIcon className="text-gray-500 w-10 h-10" />
+                    <UserIcon className="text-gray-500 w-16 h-16" />
                 )}
 
                 {/* カメラアイコンをフチの上に重ねる */}
-                <div className="absolute -bottom-0 -right-0 bg-white rounded-full w-8 h-8 shadow flex items-center justify-center border">
-                    <Camera size={16} className="text-gray-500" />
+                <div
+                    className="absolute -bottom-0 -right-0 bg-white rounded-full w-8 h-8 shadow flex items-center justify-center border"
+                    onClick={handleImageClick}
+                >
+                    <Camera size={16} />
                 </div>
+                <input
+                    type="file"
+                    id="profileImage"
+                    accept="image/*"
+                    className="hidden"
+                    ref={fileInputRef}
+                    onChange={handleImageChange}
+                />
             </div>
 
             {/* ユーザー情報 */}
@@ -62,7 +137,7 @@ export default function ProfileClient({ user }: Props) {
                         type="email"
                         className="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
                         value={email}
-                        disabled
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
 
