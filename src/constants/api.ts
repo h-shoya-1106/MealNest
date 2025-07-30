@@ -21,6 +21,12 @@ export const API = {
             UPLOAD: '/api/profile/image/upload'
         },
     },
+    STATS: {
+        MENU: '/api/stats/menus',
+        FAVORITE: '/api/stats/favorites',
+        CONTINUOUS: '/api/stats/continuous',
+        MATERIALS: '/api/stats/materials',
+    },
     MST_TIME_ZONE: '/api/mstData/mstTimeZone',
     MST_DISH_STATUS: '/api/mstData/mstDishStatus',
     MST_QUANTITY: '/api/mstData/mstQuantity',
