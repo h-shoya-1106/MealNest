@@ -16,9 +16,14 @@ export const API = {
         TOGGLE: '/api/favorite/toggle',
     },
     PROFILE: {
-        UPDATE: '/api/profile/update'
+        UPDATE: '/api/profile/update',
+        IMAGE: {
+            UPLOAD: '/api/profile/image/upload'
+        },
     },
     MST_TIME_ZONE: '/api/mstData/mstTimeZone',
     MST_DISH_STATUS: '/api/mstData/mstDishStatus',
     MST_QUANTITY: '/api/mstData/mstQuantity',
+
+    CLOUDINARY: '/api/upload',
 };
