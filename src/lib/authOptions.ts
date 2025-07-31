@@ -23,7 +23,7 @@ export const authOptions: AuthOptions = {
         if (!credentials?.email || !credentials?.password) return null;
 
         const user = await prisma.user.findUnique({ where: { email: credentials.email } });
-        if (!user) return null;
+        if (!user || !user.password) return null; 
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) return null;
@@ -45,8 +45,17 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id as string;
+      session.user.id = token.id as string;
+
+      // パスワードが未設定かチェックする
+      const dbUser = await prisma.user.findUnique({
+        where: { email: session.user.email! },
+      });
+
+      if (dbUser?.password === null) {
+        session.user.passwordMissing = true;
       }
+    }
       return session;
     },
   },
