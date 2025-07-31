@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { config } from 'dotenv';
+config();
 
 const prisma = new PrismaClient()
 
@@ -149,11 +151,20 @@ async function main() {
   console.log('シード完成！')
 }
 
+// main()
+//   .catch((e) => {
+//     console.error(e)
+//     process.exit(1)
+//   })
+//   .finally(async () => {
+//     await prisma.$disconnect()
+//   })
+
 main()
   .catch((e) => {
-    console.error(e)
-    process.exit(1)
+    console.error("❌ Seeding error:", e);
+    process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  })
+    await prisma.$disconnect();
+  });
