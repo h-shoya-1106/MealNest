@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>問題11（ミニプロジェクト）</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* タブメニューのデザイン */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .tab {
+      padding: 8px 16px;
+      background: #ccc;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .tab.active {
+      background: #666;
+      color: #fff;
+    }
+    .tab-content {
+      display: none;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .accordion {
+      cursor: pointer;
+      padding: 10px;
+      border: 1px solid #aaa;
+      background: #eee;
+      margin-top: 5px;
+    }
+    .panel {
+      display: none;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-top: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>問題11（ミニプロジェクト）</h1>
+  <p>タブ切り替えとアコーディオンを組み合わせ、さらに外部データをAjaxで読み込むページを作成してください。</p>
+
+  <div class="tabs">
+    <div class="tab active" data-target="#tab1">タブ1</div>
+    <div class="tab" data-target="#tab2">タブ2</div>
+    <div class="tab" data-target="#tab3">タブ3（Ajax）</div>
+  </div>
+
+  <div id="tab1" class="tab-content" style="display:block;">
+    <h2>アコーディオン例</h2>
+    <div class="accordion">セクション1</div>
+    <div class="panel">ここはセクション1の内容です。</div>
+    <div class="accordion">セクション2</div>
+    <div class="panel">ここはセクション2の内容です。</div>
+  </div>
+
+  <div id="tab2" class="tab-content">
+    <p>ここはタブ2の内容です。自由にHTMLを追加できます。</p>
+  </div>
+
+  <div id="tab3" class="tab-content">
+    <h2>Ajaxで読み込んだデータ</h2>
+    <ul id="ajaxData"></ul>
+    <button id="loadAjax">データ読み込み</button>
+  </div>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../js/problem11.js"></script>
+</body>
+</html>
