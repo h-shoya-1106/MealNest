@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>問題12（難易度上）動的フォーム生成＋バリデーション</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  .error { color: red; margin-top: 5px; }
+  .input-group { margin-bottom: 10px; }
+</style>
+</head>
+<body>
+  <h1>問題12（難易度上）</h1>
+  <p>「追加」ボタンで名前・メールの入力欄が増えます。送信時にすべて埋まっているかチェックし、空欄があればエラー表示してください。</p>
+
+  <form id="dynamicForm">
+    <div class="input-group">
+      <input type="text" name="name" placeholder="名前" />
+      <input type="email" name="email" placeholder="メール" />
+    </div>
+  </form>
+  <button id="addInput">追加</button>
+  <button id="submitForm">送信</button>
+  <div id="errorMsg" class="error"></div>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../js/problem12.js"></script>
+</body>
+</html>

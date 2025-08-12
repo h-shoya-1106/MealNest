@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>問題14（難易度上）モーダル＋キーボード操作</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  #modalOverlay {
+    display:none;
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+  }
+  #modalBox {
+    position:fixed; top:50%; left:50%; transform: translate(-50%, -50%);
+    background:#fff; padding:20px; width:300px; border-radius:8px;
+    outline:none;
+  }
+  button { margin-top:10px; }
+</style>
+</head>
+<body>
+  <h1>問題14（難易度上）</h1>
+  <button id="openModal">モーダルを開く</button>
+
+  <div id="modalOverlay">
+    <div id="modalBox" tabindex="0" role="dialog" aria-modal="true">
+      <p>これはモーダルウィンドウです。</p>
+      <button id="closeModal">閉じる</button>
+    </div>
+  </div>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../js/problem14.js"></script>
+</body>
+</html>
