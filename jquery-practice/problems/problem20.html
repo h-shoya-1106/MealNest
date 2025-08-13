@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>問題20（難易度上）カンバン（列間のドラッグ＆ドロップ）</title>
+<link rel="stylesheet" href="../css/style.css" />
+<link
+    rel="stylesheet"
+    href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+/>
+<style>
+  .board { display:flex; gap:16px; }
+  .column { width: 30%; background:#f4f4f4; padding:10px; border-radius:6px; }
+  .column h2 { margin-top:0; }
+  .task-list { min-height:120px; list-style:none; padding:0; margin:0; }
+  .task-list li { padding:8px; margin-bottom:8px; background:white; border:1px solid #ddd; cursor:move; border-radius:4px; }
+  .controls { margin-bottom:10px; }
+</style>
+</head>
+<body>
+  <h1>問題20（難易度上）</h1>
+  <p>シンプルなカンバンを作り、カードを列間でドラッグして移動できるようにします。状態はローカルストレージに保存します。</p>
+
+  <div class="controls">
+    <input type="text" id="newTask" placeholder="新しいタスク" />
+    <button id="addToDo">To Doに追加</button>
+  </div>
+
+  <div class="board">
+    <div class="column">
+      <h2>To Do</h2>
+      <ul id="todo" class="task-list connected"></ul>
+    </div>
+    <div class="column">
+      <h2>In Progress</h2>
+      <ul id="inprogress" class="task-list connected"></ul>
+    </div>
+    <div class="column">
+      <h2>Done</h2>
+      <ul id="done" class="task-list connected"></ul>
+    </div>
+  </div>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <script src="../js/problem20.js"></script>
+</body>
+</html>

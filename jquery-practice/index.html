@@ -5,44 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>jQuery 練習問題集</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .accordion {
+      cursor: pointer;
+      padding: 10px;
+      border: 1px solid #aaa;
+      background: #eee;
+      margin-top: 5px;
+    }
+    .panel {
+      display: none;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-top: none;
+    }
+  </style>
 </head>
 <body>
   <h1>jQuery 練習問題集</h1>
-  <p>初級〜上級＋ミニプロジェクトの全11問</p>
+  <p>初級〜上級＋応用編</p>
   
-  <h2>初級編</h2>
-  <ul>
-    <li><a href="problems/problem01.html">問題01</a></li>
-    <li><a href="problems/problem02.html">問題02</a></li>
-    <li><a href="problems/problem03.html">問題03</a></li>
-  </ul>
+  <h2 class="accordion">初級編</h2>
+  <div class="panel">
+    <ul>
+      <li><a href="problems/problem01.html">問題01【ボタンをクリックすると背景色を水色に変えるコードを作成してください。】</a></li>
+      <li><a href="problems/problem02.html">問題02【ページ読み込み時に、すべての段落の文字色を赤にしてください。】</a></li>
+      <li><a href="problems/problem03.html">問題03【ボタンをクリックすると画像を非表示にしてください。】</a></li>
+    </ul>
+  </div>
 
-  <h2>中級編</h2>
-  <ul>
-    <li><a href="problems/problem04.html">問題04</a></li>
-    <li><a href="problems/problem05.html">問題05</a></li>
-    <li><a href="problems/problem06.html">問題06</a></li>
-    <li><a href="problems/problem07.html">問題07</a></li>
-  </ul>
+  <h2 class="accordion">中級編</h2>
+  <div class="panel">
+    <ul>
+      <li><a href="problems/problem04.html">問題04【ボタンをクリックするとリストに新しい項目「新しい項目」が追加されるようにしてください。】</a></li>
+      <li><a href="problems/problem05.html">問題05【ボタンをクリックすると、偶数番目のリスト項目の背景色を黄色にしてください。】</a></li>
+      <li><a href="problems/problem06.html">問題06【テキストボックスに入力した文字を、ボタンを押すと下の段落に表示してください。】</a></li>
+      <li><a href="problems/problem07.html">問題07【リスト項目をクリックしたら、その項目が赤文字になるようにしてください。（新しく追加された項目も対象）】</a></li>
+    </ul>
+  </div>
 
-  <h2>上級編</h2>
-  <ul>
-    <li><a href="problems/problem08.html">問題08</a></li>
-    <li><a href="problems/problem09.html">問題09</a></li>
-    <li><a href="problems/problem10.html">問題10</a></li>
-  </ul>
+  <h2 class="accordion">上級編</h2>
+  <div class="panel">
+    <ul>
+      <li><a href="problems/problem08.html">問題08【ボタンをクリックすると、ボックスが左右にアニメーション移動し、その後フェードアウトするようにしてください。】</a></li>
+      <li><a href="problems/problem09.html">問題09【フォームに入力した内容をJSON形式に変換してコンソールに出力してください。（名前とメールアドレス）】</a></li>
+      <li><a href="problems/problem10.html">問題10【外部のJSONデータ（サンプルURL）を取得し、リストとして表示してください。】</a></li>
+    </ul>
+  </div>
 
-  <h2>ミニプロジェクト</h2>
-  <ul>
-    <li><a href="problems/problem11.html">問題11</a></li>
-  </ul>
-
-  <h2>応用編</h2>
-  <ul>
-    <li><a href="problems/problem12.html">問題12</a></li>
-    <li><a href="problems/problem13.html">問題13</a></li>
-    <li><a href="problems/problem14.html">問題14</a></li>
-    <li><a href="problems/problem15.html">問題15</a></li>
-  </ul>
+  <h2 class="accordion">応用編</h2>
+  <div class="panel">
+    <ul>
+      <li><a href="problems/problem11.html">問題11【タブ切り替えとアコーディオンを組み合わせ、さらに外部データをAjaxで読み込むページを作成してください。】</a></li>
+      <li><a href="problems/problem12.html">問題12【「追加」ボタンで名前・メールの入力欄が増えます。送信時にすべて埋まっているかチェックし、空欄があればエラー表示してください。】</a></li>
+      <li><a href="problems/problem13.html">問題13【リスト項目をドラッグ＆ドロップで並び替え、順序をコンソールに出力してください。】</a></li>
+      <li><a href="problems/problem14.html">問題14【モーダルを開く】</a></li>
+      <li><a href="problems/problem15.html">問題15【複数画像を選択し、プレビュー表示。ドラッグ＆ドロップで並び替えができます。】</a></li>
+      <li><a href="problems/problem16.html">問題16【サムネイルをクリックで拡大。左右キーやボタンで画像切替が可能。】</a></li>
+      <li><a href="problems/problem17.html">問題17【タスクを並び替え可能にし、ローカルストレージに保存します。】</a></li>
+      <li><a href="problems/problem18.html">問題18【フォーム入力値に対してのリアルタイムバリデーション】</a></li>
+      <li><a href="problems/problem19.html">問題19【スクロールアニメーション】</a></li>
+      <li><a href="problems/problem20.html">問題20【シンプルなカンバンを作り、カードを列間でドラッグして移動できるようにします。状態はローカルストレージに保存します。】</a></li>
+      <li><a href="problems/problem21.html">問題21【テーブルのセルをダブルクリックするとインラインで編集でき、変更はローカルストレージへ保存されます。】</a></li>
+      <li><a href="problems/problem22.html">問題22【複数ファイル選択時に各ファイルのアップロード進捗を擬似的に表示します（サーバーは使わずクライアント側で進捗をシミュレート）。】</a></li>
+      <li><a href="problems/problem23.html">問題23【タグ選択とキーワード検索でアイテムを絞り込みます（大文字小文字無視）。】</a></li>
+      <li><a href="problems/problem24.html">問題24【時間スロットをクリックしてイベントを登録・削除できる簡易デイプランナー。データはローカルストレージに保存します。】</a></li>
+    </ul>
+  </div>
+    
+  <script src="./libs/jquery.min.js"></script>
+  <script src="./js/index.js"></script>
 </body>
 </html>

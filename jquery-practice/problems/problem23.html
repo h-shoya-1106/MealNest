@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>問題23（難易度上）タグ＋検索による複合フィルター</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  .tags { display:flex; gap:8px; margin-bottom:10px; }
+  .tag { padding:6px 10px; border-radius:999px; background:#eee; cursor:pointer; }
+  .tag.active { background:#007BFF; color:#fff; }
+  .item { padding:8px; border:1px solid #ddd; margin-bottom:8px; border-radius:4px; }
+</style>
+</head>
+<body>
+  <h1>問題23（難易度上）</h1>
+  <p>タグ選択とキーワード検索でアイテムを絞り込みます（大文字小文字無視）。</p>
+
+  <div class="tags">
+    <div class="tag" data-tag="fruit">果物</div>
+    <div class="tag" data-tag="vegetable">野菜</div>
+    <div class="tag" data-tag="drink">飲料</div>
+  </div>
+
+  <input id="filterInput" placeholder="検索ワード">
+  <div id="items">
+    <div class="item" data-tags="fruit">りんご</div>
+    <div class="item" data-tags="fruit">バナナ</div>
+    <div class="item" data-tags="vegetable">にんじん</div>
+    <div class="item" data-tags="vegetable">レタス</div>
+    <div class="item" data-tags="drink">コーヒー</div>
+  </div>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../js/problem23.js"></script>
+</body>
+</html>

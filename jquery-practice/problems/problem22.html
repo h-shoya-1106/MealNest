@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>問題22（難易度上）ファイルアップロードの進捗表示（擬似）</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  .file-row { margin:8px 0; }
+  .bar { width:100%; height:12px; background:#eee; border-radius:6px; overflow:hidden; }
+  .bar > .progress { height:100%; width:0%; background:#4caf50; transition:width 0.1s linear; }
+  .meta { font-size:12px; margin-top:4px; }
+</style>
+</head>
+<body>
+  <h1>問題22（難易度上）</h1>
+  <p>複数ファイル選択時に各ファイルのアップロード進捗を擬似的に表示します（サーバーは使わずクライアント側で進捗をシミュレート）。</p>
+
+  <input type="file" id="fileInput" multiple>
+  <div id="fileList"></div>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../js/problem22.js"></script>
+</body>
+</html>
