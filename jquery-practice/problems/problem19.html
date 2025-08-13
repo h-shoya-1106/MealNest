@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>問題19（難易度上）スクロールアニメーション</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  .fadein {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+  }
+  .fadein.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  section {
+    height: 400px;
+    background: #eee;
+    margin: 20px 0;
+    padding: 20px;
+  }
+</style>
+</head>
+<body>
+  <h1>問題19（難易度上）</h1>
+  <section class="fadein">セクション1</section>
+  <section class="fadein">セクション2</section>
+  <section class="fadein">セクション3</section>
+  <section class="fadein">セクション4</section>
+  <section class="fadein">セクション5</section>
+  <section class="fadein">セクション6</section>
+  <section class="fadein">セクション7</section>
+  <section class="fadein">セクション8</section>
+  <section class="fadein">セクション9</section>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../js/problem19.js"></script>
+</body>
+</html>

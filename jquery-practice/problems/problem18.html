@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>問題18（難易度上）リアルタイムフォームバリデーション</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  .error { color: red; font-size: 0.9em; }
+</style>
+</head>
+<body>
+  <h1>問題18（難易度上）</h1>
+  <form id="regForm">
+    <label>名前: <input type="text" name="name"></label>
+    <div class="error" id="nameError"></div>
+    <label>メール: <input type="email" name="email"></label>
+    <div class="error" id="emailError"></div>
+    <button type="submit">送信</button>
+  </form>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../js/problem18.js"></script>
+</body>
+</html>

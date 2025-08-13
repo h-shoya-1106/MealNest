@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>問題16（難易度上）画像ギャラリー＋モーダル表示</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  .gallery {
+    display: flex;
+    gap: 10px;
+  }
+  .gallery img {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    cursor: pointer;
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+  }
+  .modal img {
+    max-width: 80%;
+    max-height: 80%;
+  }
+  .controls {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <h1>問題16（難易度上）</h1>
+  <p>サムネイルをクリックで拡大。左右キーやボタンで画像切替が可能。</p>
+
+  <div class="gallery">
+    <img src="../images/sample1.jpg" data-index="0">
+    <img src="../images/sample2.jpg" data-index="1">
+    <img src="../images/sample3.jpg" data-index="2">
+  </div>
+
+  <div class="modal">
+    <div class="controls">
+      <span id="prev">&#10094;</span>
+      <span id="next">&#10095;</span>
+    </div>
+    <img id="modalImage" src="">
+  </div>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../js/problem16.js"></script>
+</body>
+</html>
