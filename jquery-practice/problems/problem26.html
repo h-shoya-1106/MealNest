@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>問題26（難易度上）アコーディオンメニュー＋状態保存</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  .accordion { border: 1px solid #ccc; border-radius: 4px; }
+  .accordion-header {
+    background: #eee;
+    padding: 10px;
+    cursor: pointer;
+  }
+  .accordion-content {
+    display: none;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+  }
+  .active-header { background: #ddd; }
+</style>
+</head>
+<body>
+  <h1>問題26（難易度上）</h1>
+  <p>アコーディオンメニューを開閉し、開いた状態をローカルストレージに保存します。</p>
+
+  <div class="accordion">
+    <div class="accordion-header" data-id="1">セクション1</div>
+    <div class="accordion-content">内容1</div>
+    <div class="accordion-header" data-id="2">セクション2</div>
+    <div class="accordion-content">内容2</div>
+    <div class="accordion-header" data-id="3">セクション3</div>
+    <div class="accordion-content">内容3</div>
+  </div>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../js/problem26.js"></script>
+</body>
+</html>

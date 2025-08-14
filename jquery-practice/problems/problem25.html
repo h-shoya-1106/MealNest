@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>問題25（難易度上）モーダルウィンドウとフォームバリデーション</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  #modalOverlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+  }
+  #modalContent {
+    background: #fff;
+    padding: 20px;
+    width: 300px;
+    margin: 100px auto;
+    border-radius: 8px;
+    position: relative;
+  }
+  #modalContent h2 { margin-top: 0; }
+  .error { color: red; font-size: 0.9em; }
+  .closeBtn {
+    position: absolute; right: 10px; top: 10px;
+    cursor: pointer; font-weight: bold;
+  }
+</style>
+</head>
+<body>
+  <h1>問題25（難易度上）</h1>
+  <p>モーダルウィンドウを開いて、フォーム入力をリアルタイムバリデーションします。</p>
+  <button id="openModal">モーダルを開く</button>
+
+  <div id="modalOverlay">
+    <div id="modalContent">
+      <span class="closeBtn">×</span>
+      <h2>ユーザー登録</h2>
+      <form id="userForm">
+        <label>名前: <input type="text" name="name" /></label>
+        <div class="error" id="nameError"></div>
+        <label>メール: <input type="email" name="email" /></label>
+        <div class="error" id="emailError"></div>
+        <button type="submit">送信</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../js/problem25.js"></script>
+</body>
+</html>
